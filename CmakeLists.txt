@@ -13,7 +13,12 @@ FetchContent_Declare(SFML
     GIT_TAG 2.6.x)
 FetchContent_MakeAvailable(SFML)
 
-add_executable(jumpydude main.cpp)
+file(GLOB engine_SRC
+     "engine/**/*.hpp"
+     "engine/**/*.cpp"
+)
+
+add_executable(jumpydude main.cpp ${engine_SRC})
 target_link_libraries(jumpydude PRIVATE sfml-graphics)
 target_compile_features(jumpydude PRIVATE cxx_std_20)
 

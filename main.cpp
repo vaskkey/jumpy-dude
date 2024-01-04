@@ -1,1 +1,9 @@
-auto main() -> int { return 0; }
+#include "engine/game/Game.hpp"
+
+auto
+main() -> int
+{
+  auto game = Engine::Game();
+
+  game.loop();
+}

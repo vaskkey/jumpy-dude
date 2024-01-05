@@ -14,8 +14,8 @@ FetchContent_Declare(SFML
 FetchContent_MakeAvailable(SFML)
 
 file(GLOB engine_SRC
-     "engine/**/*.hpp"
-     "engine/**/*.cpp"
+     "Engine/**/*.hpp"
+     "Engine/**/*.cpp"
 )
 
 add_executable(jumpydude main.cpp ${engine_SRC})

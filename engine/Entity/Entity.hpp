@@ -16,6 +16,13 @@ class Entity
   sf::Vector2f m_velocity;
   Components::ENTITY_STATE m_state = Components::ENTITY_STATE::STILL;
 
+  const float m_maxVelocity = 10;
+  const float m_minVelocity = .2;
+  const float m_acceleration = 1;
+  const float m_drag = 0.95;
+  const float m_gravity = 4;
+  const float m_maxYVelocity = 10;
+
   const int m_speed = 1;
 
 public:
@@ -28,11 +35,13 @@ public:
 
   auto update() -> void;
   auto render(sf::RenderTarget& target) -> void;
+
   auto getState() const -> const Components::ENTITY_STATE&;
 
 private:
   auto m_move() -> void;
   auto m_setSpeed() -> void;
+  auto m_manageGravity() -> void;
   auto m_isMoving() -> bool;
 };
 

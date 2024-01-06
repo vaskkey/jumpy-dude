@@ -22,7 +22,10 @@ class Animation
   sf::IntRect m_intRect;
   sf::Clock m_animTimer;
 
+  int m_animationTimeout;
+
   std::map<ENTITY_STATE, int> m_frames;
+  std::map<ENTITY_STATE, int> m_verticalOffset;
 
   float m_scale = 1;
   float m_origin = 0;
@@ -37,13 +40,15 @@ public:
   auto initSprite() -> Animation*;
   auto animate(const ENTITY_STATE& state) -> Animation*;
   auto move(const sf::Vector2f& position) -> Animation*;
+  auto setAnimationTimeut(int timeout) -> Animation*;
 
-  auto setFrames(ENTITY_STATE state, int numOfFrames) -> Animation*;
+  auto setFrames(ENTITY_STATE state, int numOfFrames, int offsetY)
+    -> Animation*;
 
   auto getSprite() const -> const sf::Sprite&;
 
 private:
-  auto m_walkingAnimation() -> void;
-  auto m_stillAnimation() -> void;
+  auto m_walkingAnimation(int frames, int offsetY) -> void;
+  auto m_stillAnimation(int frames, int offsetY) -> void;
 };
 }

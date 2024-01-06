@@ -4,10 +4,9 @@
 
 namespace Engine {
 
-Entity::Entity()
+Entity::Entity(int speed)
+  : m_speed(speed)
 {
-  this->m_boundingBox.width = 56;
-  this->m_boundingBox.height = 56;
 }
 
 auto
@@ -108,5 +107,12 @@ Entity::land(float yPos) -> void
   this->m_position.y = yPos;
   this->m_velocity.y = 0;
   this->m_grounded = true;
+}
+
+auto
+Entity::setBoundingBox(int width, int height) -> void
+{
+  this->m_boundingBox.width = 56;
+  this->m_boundingBox.height = 56;
 }
 }

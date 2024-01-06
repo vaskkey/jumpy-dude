@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../Entity/Entity.hpp"
+#include "../EntityFactory/EntityFactory.hpp"
 #include "SFML/Graphics/RenderWindow.hpp"
 #include "SFML/Graphics/Sprite.hpp"
 #include "SFML/Graphics/Texture.hpp"
@@ -12,7 +13,8 @@ class Game
   sf::RenderWindow m_window;
   sf::Texture m_worldTexture;
   sf::Sprite m_worldBg;
-  Entity m_player;
+  EntityFactory m_entityFactory;
+  Entity* m_player;
 
 public:
   Game();

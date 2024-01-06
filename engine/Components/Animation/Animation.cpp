@@ -11,22 +11,25 @@ Animation::Animation()
 auto
 Animation::animate(const ENTITY_STATE& state) -> Animation*
 {
-  if (this->m_animTimer.getElapsedTime().asMilliseconds() < 100)
+  if (this->m_animTimer.getElapsedTime().asMilliseconds() <
+      this->m_animationTimeout)
     return this;
 
+  int frames = this->m_frames.at(state);
+  int offsetY = this->m_verticalOffset.at(state);
   switch (state) {
     case ENTITY_STATE::WALKING_LEFT:
       this->m_scale = -1;
       this->m_origin = this->m_sprite.getGlobalBounds().width;
-      this->m_walkingAnimation();
+      this->m_walkingAnimation(frames, offsetY);
       break;
     case ENTITY_STATE::WALKING_RIGHT:
       this->m_scale = 1;
       this->m_origin = 0;
-      this->m_walkingAnimation();
+      this->m_walkingAnimation(frames, offsetY);
       break;
     case ENTITY_STATE::STILL:
-      this->m_stillAnimation();
+      this->m_stillAnimation(frames, offsetY);
       break;
   }
 
@@ -72,27 +75,42 @@ Animation::move(const sf::Vector2f& position) -> Animation*
 }
 
 auto
-Animation::m_walkingAnimation() -> void
+Animation::m_walkingAnimation(int frames, int offsetY) -> void
 {
-  if (++this->m_frame >= 8) {
+  if (++this->m_frame >= frames) {
     this->m_frame = 0;
   }
 
   this->m_intRect.left = this->m_intRect.width * this->m_frame;
+  this->m_intRect.top = this->m_intRect.height * offsetY;
   this->m_sprite.setScale(this->m_scale, 1);
   this->m_sprite.setOrigin(this->m_origin, 0);
 }
 
 auto
-Animation::m_stillAnimation() -> void
+Animation::m_stillAnimation(int frames, int offsetY) -> void
 {
-  this->m_intRect.left = 0;
+  if (++this->m_frame >= frames) {
+    this->m_frame = 0;
+  }
+
+  this->m_intRect.left = this->m_intRect.width * this->m_frame;
+  this->m_intRect.top = this->m_intRect.height * offsetY;
 }
 
 auto
-Animation::setFrames(ENTITY_STATE state, int numOfFrames) -> Animation*
+Animation::setFrames(ENTITY_STATE state, int numOfFrames, int offsetY)
+  -> Animation*
 {
   this->m_frames[state] = numOfFrames;
+  this->m_verticalOffset[state] = offsetY;
+  return this;
+}
+
+auto
+Animation::setAnimationTimeut(int timeout) -> Animation*
+{
+  this->m_animationTimeout = timeout;
   return this;
 }
 }

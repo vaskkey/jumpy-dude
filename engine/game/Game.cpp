@@ -9,15 +9,14 @@ Game::Game()
   this->m_window.create(sf::VideoMode(800, 600), "Jumpy Dude");
   this->m_window.setFramerateLimit(60);
 
+  this->m_player = this->m_entityFactory.createEntity(ENTITY_TYPE::PLAYER);
+  this->m_entityFactory.createEntity(ENTITY_TYPE::MUSHROOM);
+
   this->m_worldTexture.loadFromFile("static/background_layer_1.png");
   this->m_worldBg.setTexture(this->m_worldTexture);
   this->m_worldBg.scale(3.5, 3.5);
 
-  this->m_player.land(this->m_window.getSize().y - this->m_player.getBox().height);
-  this->m_player.c_animation.setTexture("static/main-char-1.png")
-    ->setTextureSize(56, 56)
-    ->initSprite()
-    ->animate(this->m_player.getState());
+  this->m_player->land(this->m_window.getSize().y - this->m_player->getBox().height);
 }
 
 auto
@@ -27,7 +26,7 @@ Game::loop() -> void
     this->m_handleEvents();
     this->m_updatePlayer();
 
-    Physics::manageWindowCollision(this->m_window, this->m_player);
+    this->m_entityFactory.updateEntities(this->m_window);
 
     this->m_draw();
   }
@@ -62,7 +61,7 @@ Game::m_draw() -> void
   this->m_window.clear();
 
   this->m_window.draw(this->m_worldBg);
-  this->m_player.render(this->m_window);
+  this->m_entityFactory.renderEntities(this->m_window);
 
   this->m_window.display();
 }
@@ -70,7 +69,6 @@ Game::m_draw() -> void
 auto
 Game::m_updatePlayer() -> void
 {
-  this->m_player.update();
 }
 
 auto
@@ -78,16 +76,16 @@ Game::m_handleKeyEvent(const sf::Keyboard::Key& key, bool value) -> void
 {
   switch (key) {
     case sf::Keyboard::Key::W:
-      this->m_player.up = value;
+      this->m_player->up = value;
       break;
     case sf::Keyboard::Key::S:
-      this->m_player.down = value;
+      this->m_player->down = value;
       break;
     case sf::Keyboard::Key::A:
-      this->m_player.left = value;
+      this->m_player->left = value;
       break;
     case sf::Keyboard::Key::D:
-      this->m_player.right = value;
+      this->m_player->right = value;
       break;
     default:
       break;

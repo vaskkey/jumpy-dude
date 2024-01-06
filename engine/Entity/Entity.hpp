@@ -22,13 +22,13 @@ class Entity
   const float m_minVelocity = .2;
   const float m_acceleration = 1;
   const float m_drag = 0.95;
-  const float m_gravity = 4;
-  const float m_maxYVelocity = 10;
+  const float m_gravity = 2;
+  const float m_maxYVelocity = 20;
 
   bool m_grounded = false;
   float m_jumpedDistance = 0;
 
-  const int m_speed = 5;
+  const int m_speed;
 
 public:
   // Animation
@@ -36,7 +36,7 @@ public:
   // Movement
   bool up = false, down = false, left = false, right = false;
 
-  Entity();
+  Entity(int speed);
 
   auto update() -> void;
   auto render(sf::RenderTarget& target) -> void;
@@ -45,6 +45,7 @@ public:
   auto getBox() const -> const sf::FloatRect&;
 
   auto land(float yPos) -> void;
+  auto setBoundingBox(int width, int height) -> void;
 
 private:
   auto m_move() -> void;

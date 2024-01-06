@@ -2,12 +2,16 @@
 
 #include "../Entity/Entity.hpp"
 #include "SFML/Graphics/RenderWindow.hpp"
+#include "SFML/Graphics/Sprite.hpp"
+#include "SFML/Graphics/Texture.hpp"
 #include "SFML/Window/Keyboard.hpp"
 
 namespace Engine {
 class Game
 {
   sf::RenderWindow m_window;
+  sf::Texture m_worldTexture;
+  sf::Sprite m_worldBg;
   Entity m_player;
 
 public:

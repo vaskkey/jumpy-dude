@@ -4,7 +4,11 @@
 
 namespace Engine {
 
-Entity::Entity() {}
+Entity::Entity()
+{
+  this->m_boundingBox.width = 56;
+  this->m_boundingBox.height = 56;
+}
 
 auto
 Entity::render(sf::RenderTarget& target) -> void
@@ -27,6 +31,9 @@ Entity::m_move() -> void
   this->m_setSpeed();
   this->m_manageGravity();
   this->m_position += this->m_velocity;
+
+  this->m_boundingBox.left = this->m_position.x;
+  this->m_boundingBox.top = this->m_position.y;
 }
 
 auto
@@ -48,10 +55,13 @@ Entity::m_setSpeed() -> void
   }
 
   if (this->up) {
-        this->m_velocity.y = this->m_speed * -1;
-  }
-
-  if (this->down) {
+    if (this->m_jumpedDistance <= 60) {
+      this->m_velocity.y = -20;
+      m_grounded = false;
+      this->m_jumpedDistance += 20;
+    }
+  } else if (this->m_grounded) {
+    this->m_jumpedDistance = 0;
   }
 }
 
@@ -70,6 +80,9 @@ Entity::getState() const -> const Components::ENTITY_STATE&
 auto
 Entity::m_manageGravity() -> void
 {
+  if (m_grounded)
+    return;
+
   this->m_velocity.y += this->m_gravity;
   if (std::abs(this->m_velocity.y) > this->m_maxYVelocity) {
     float yDir = this->m_velocity.y < 0 ? -1 : 1;
@@ -81,5 +94,19 @@ Entity::m_manageGravity() -> void
   if (std::abs(this->m_velocity.y) < this->m_minVelocity) {
     this->m_velocity.y = 0;
   }
+}
+
+auto
+Entity::getBox() const -> const sf::FloatRect&
+{
+  return this->m_boundingBox;
+}
+
+auto
+Entity::land(float yPos) -> void
+{
+  this->m_position.y = yPos;
+  this->m_velocity.y = 0;
+  this->m_grounded = true;
 }
 }

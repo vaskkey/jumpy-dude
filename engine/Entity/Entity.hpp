@@ -14,6 +14,8 @@ class Entity
 {
   sf::Vector2f m_position;
   sf::Vector2f m_velocity;
+  sf::FloatRect m_boundingBox;
+
   Components::ENTITY_STATE m_state = Components::ENTITY_STATE::STILL;
 
   const float m_maxVelocity = 10;
@@ -23,7 +25,10 @@ class Entity
   const float m_gravity = 4;
   const float m_maxYVelocity = 10;
 
-  const int m_speed = 1;
+  bool m_grounded = false;
+  float m_jumpedDistance = 0;
+
+  const int m_speed = 5;
 
 public:
   // Animation
@@ -37,6 +42,9 @@ public:
   auto render(sf::RenderTarget& target) -> void;
 
   auto getState() const -> const Components::ENTITY_STATE&;
+  auto getBox() const -> const sf::FloatRect&;
+
+  auto land(float yPos) -> void;
 
 private:
   auto m_move() -> void;

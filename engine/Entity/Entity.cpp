@@ -3,21 +3,13 @@
 
 namespace Engine {
 
-Entity::Entity(const std::string& file, int width, int height)
-  : m_intRect(0, 0, width, height)
-{
-  this->m_texture.loadFromFile(file);
-  this->m_sprite.setTexture(this->m_texture);
-  this->m_sprite.setPosition(this->m_position);
-
-  this->m_animTimer.restart();
-}
+Entity::Entity() {}
 
 auto
 Entity::render(sf::RenderTarget& target) -> void
 {
-  this->m_animate();
-  target.draw(this->m_sprite);
+  this->c_animation.animate(this->getState())->move(this->m_position);
+  target.draw(this->c_animation.getSprite());
 }
 
 auto
@@ -25,8 +17,7 @@ Entity::update() -> void
 {
   this->m_move();
 
-  this->m_sprite.setPosition(this->m_position);
-  this->m_sprite.setTextureRect(this->m_intRect);
+  this->c_animation.animate(this->getState())->move(this->m_position);
 }
 
 auto
@@ -41,14 +32,17 @@ Entity::m_setSpeed() -> void
 {
   if (this->left) {
     this->m_velocity.x = this->m_speed * -1;
+      this->m_state = Components::ENTITY_STATE::WALKING_LEFT;
   }
 
   if (this->right) {
     this->m_velocity.x = this->m_speed;
+      this->m_state = Components::ENTITY_STATE::WALKING_RIGHT;
   }
 
   if (!this->left && !this->right) {
     this->m_velocity.x = 0;
+    this->m_state = Components::ENTITY_STATE::STILL;
   }
 
   if (this->up) {
@@ -71,19 +65,8 @@ Entity::m_isMoving() -> bool
 }
 
 auto
-Entity::m_animate() -> void
+Entity::getState() const -> const Components::ENTITY_STATE&
 {
-  if (this->m_animTimer.getElapsedTime().asMilliseconds() < 100)
-    return;
-
-  if (this->m_isMoving()) {
-    if (++this->m_frame >= 8) {
-      this->m_frame = 0;
-    }
-    this->m_intRect.left = this->m_intRect.width * this->m_frame;
-
-    this->m_animTimer.restart();
-    this->m_sprite.setTextureRect(this->m_intRect);
-  }
+  return this->m_state;
 }
 }

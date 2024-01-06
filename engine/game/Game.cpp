@@ -4,10 +4,14 @@
 
 namespace Engine {
 Game::Game()
-  : m_player("static/main-char-1.png", 56, 56)
 {
   this->m_window.create(sf::VideoMode(800, 600), "Jumpy Dude");
   this->m_window.setFramerateLimit(60);
+
+  this->m_player.c_animation.setTexture("static/main-char-1.png")
+    ->setTextureSize(56, 56)
+    ->initSprite()
+    ->animate(this->m_player.getState());
 }
 
 auto

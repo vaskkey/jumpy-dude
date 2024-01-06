@@ -7,34 +7,33 @@
 #include "SFML/System/Clock.hpp"
 #include "SFML/System/Vector2.hpp"
 
-namespace Engine {
+#include "../Components/Animation/Animation.hpp"
 
+namespace Engine {
 class Entity
 {
-  sf::Sprite m_sprite;
-  sf::Texture m_texture;
   sf::Vector2f m_position;
   sf::Vector2f m_velocity;
-  sf::IntRect m_intRect;
-  sf::Clock m_animTimer;
+  Components::ENTITY_STATE m_state = Components::ENTITY_STATE::STILL;
 
   const int m_speed = 1;
-  int m_frame = 6;
 
 public:
+  // Animation
+  Components::Animation c_animation;
   // Movement
   bool up = false, down = false, left = false, right = false;
 
-  Entity(const std::string& file, int width, int height);
+  Entity();
 
   auto update() -> void;
   auto render(sf::RenderTarget& target) -> void;
+  auto getState() const -> const Components::ENTITY_STATE&;
 
 private:
   auto m_move() -> void;
   auto m_setSpeed() -> void;
   auto m_isMoving() -> bool;
-  auto m_animate() -> void;
 };
 
 }

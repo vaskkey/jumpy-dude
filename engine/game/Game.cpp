@@ -3,6 +3,7 @@
 #include "SFML/Graphics/Rect.hpp"
 #include "SFML/System/Vector2.hpp"
 #include "SFML/Window/Event.hpp"
+#include "SFML/Window/Keyboard.hpp"
 #include "SFML/Window/VideoMode.hpp"
 
 namespace Engine {
@@ -87,6 +88,8 @@ Game::m_handleKeyEvent(const sf::Keyboard::Key& key, bool value) -> void
     case sf::Keyboard::Key::D:
       this->m_player->right = value;
       break;
+    case sf::Keyboard::Key::Space:
+      this->m_player->attacking = value;
     default:
       break;
   }

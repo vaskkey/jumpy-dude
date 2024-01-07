@@ -19,6 +19,7 @@ class Entity
   sf::FloatRect m_prevBox;
 
   Components::ENTITY_STATE m_state = Components::ENTITY_STATE::STILL;
+  Components::ENTITY_FACING m_facingDirection = Components::ENTITY_FACING::LEFT;
 
   const float m_maxVelocity = 10;
   const float m_minVelocity = .2;
@@ -36,14 +37,18 @@ public:
   // Animation
   Components::Animation c_animation;
   // Movement
-  bool up = false, down = false, left = false, right = false;
+  bool up = false, down = false, left = false, right = false, attacking = false;
 
-  Entity(int speed);
+  const int DAMAGE;
+  int hp;
+
+  Entity(int speed, int damage, int hp);
 
   auto update() -> void;
   auto render(sf::RenderTarget& target) -> void;
 
-  auto getState() const -> const Components::ENTITY_STATE&;
+  auto getState() const -> Components::ENTITY_STATE;
+  auto getFacingDirection() const -> Components::ENTITY_FACING;
   auto getBox() const -> const sf::FloatRect&;
   auto getPreviousBox() const -> const sf::FloatRect&;
   auto position() const -> const sf::Vector2f&;
@@ -55,10 +60,11 @@ public:
   auto land() -> void;
 
   auto setBoundingBox(int width, int height) -> void;
+  auto takeDamage(int damage) -> void;
 
 private:
   auto m_move() -> void;
-  auto m_setSpeed() -> void;
+  auto m_setState() -> void;
   auto m_manageGravity() -> void;
   auto m_isMoving() -> bool;
 };

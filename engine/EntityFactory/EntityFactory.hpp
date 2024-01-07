@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../Entity/Entity.hpp"
+#include "SFML/Graphics/RectangleShape.hpp"
 #include "SFML/Graphics/RenderWindow.hpp"
 #include "ranges"
 
@@ -28,6 +29,8 @@ public:
 private:
   auto m_getPlayer() -> Entity*;
   auto m_getMushroom() -> Entity*;
+  auto m_manageAttacks(Entity* entity) -> void;
+  auto m_cleanupDeadEntities() -> void;
 };
 
 }

@@ -1,21 +1,24 @@
 #include "Entity.hpp"
 #include "SFML/Graphics/Color.hpp"
+#include "SFML/Graphics/Rect.hpp"
 #include "SFML/Graphics/RectangleShape.hpp"
 #include "SFML/System/Vector2.hpp"
-#include <cstdlib>
 #include <iostream>
 
 namespace Engine {
 
-Entity::Entity(int speed)
+Entity::Entity(int speed, int damage, int hp)
   : m_speed(speed)
+  , DAMAGE(damage)
+  , hp(hp)
 {
 }
 
 auto
 Entity::render(sf::RenderTarget& target) -> void
 {
-  this->c_animation.animate(this->getState())->move(this->m_position);
+  this->c_animation.animate(this->getState(), this->getFacingDirection())
+    ->move(this->m_position);
   target.draw(this->c_animation.getSprite());
   // auto box = sf::RectangleShape();
   // box.setPosition(this->m_boundingBox.getPosition());
@@ -29,77 +32,23 @@ Entity::render(sf::RenderTarget& target) -> void
 auto
 Entity::update() -> void
 {
+  this->m_setState();
   this->m_move();
 
-  this->c_animation.animate(this->getState())->move(this->m_position);
+  this->c_animation.animate(this->getState(), this->getFacingDirection())
+    ->move(this->m_position);
 }
 
 auto
-Entity::m_move() -> void
-{
-  this->m_setSpeed();
-  this->m_manageGravity();
-  this->moveBy(this->m_velocity);
-
-  this->m_boundingBox.left = this->m_position.x;
-  this->m_boundingBox.top = this->m_position.y;
-}
-
-auto
-Entity::m_setSpeed() -> void
-{
-  if (this->left) {
-    this->m_velocity.x = this->m_speed * -1;
-    this->m_state = Components::ENTITY_STATE::WALKING_LEFT;
-  }
-
-  if (this->right) {
-    this->m_velocity.x = this->m_speed;
-    this->m_state = Components::ENTITY_STATE::WALKING_RIGHT;
-  }
-
-  if (!this->left && !this->right) {
-    this->m_velocity.x = 0;
-    this->m_state = Components::ENTITY_STATE::STILL;
-  }
-
-  if (this->up) {
-    m_grounded = false;
-    if (this->m_jumpedDistance <= 60) {
-      this->m_velocity.y = -20;
-      this->m_jumpedDistance += 20;
-    }
-  } else if (this->m_grounded) {
-    this->m_jumpedDistance = 0;
-  }
-}
-
-auto
-Entity::m_isMoving() -> bool
-{
-  return this->up || this->down || this->left || this->right;
-}
-
-auto
-Entity::getState() const -> const Components::ENTITY_STATE&
+Entity::getState() const -> Components::ENTITY_STATE
 {
   return this->m_state;
 }
 
 auto
-Entity::m_manageGravity() -> void
+Entity::getFacingDirection() const -> Components::ENTITY_FACING
 {
-  this->m_velocity.y += this->m_gravity;
-  if (std::abs(this->m_velocity.y) > this->m_maxYVelocity) {
-    float yDir = this->m_velocity.y < 0 ? -1 : 1;
-    this->m_velocity.y = this->m_maxYVelocity * yDir;
-  }
-
-  this->m_velocity.y *= this->m_drag;
-
-  if (std::abs(this->m_velocity.y) < this->m_minVelocity) {
-    this->m_velocity.y = 0;
-  }
+  return this->m_facingDirection;
 }
 
 auto
@@ -112,6 +61,24 @@ auto
 Entity::getPreviousBox() const -> const sf::FloatRect&
 {
   return this->m_prevBox;
+}
+
+auto
+Entity::position() const -> const sf::Vector2f&
+{
+  return this->m_position;
+}
+
+auto
+Entity::velocity() const -> const sf::Vector2f&
+{
+  return this->m_velocity;
+}
+
+auto
+Entity::getGrounded() const -> bool
+{
+  return this->m_grounded;
 }
 
 auto
@@ -147,20 +114,69 @@ Entity::setBoundingBox(int width, int height) -> void
 }
 
 auto
-Entity::position() const -> const sf::Vector2f&
+Entity::m_move() -> void
 {
-  return this->m_position;
+  this->m_manageGravity();
+  this->moveBy(this->m_velocity);
+
+  this->m_boundingBox.left = this->m_position.x;
+  this->m_boundingBox.top = this->m_position.y;
 }
 
 auto
-Entity::velocity() const -> const sf::Vector2f&
+Entity::m_setState() -> void
 {
-  return this->m_velocity;
+  if (this->left) {
+    this->m_velocity.x = this->m_speed * -1;
+    this->m_state = Components::ENTITY_STATE::WALKING_LEFT;
+    this->m_facingDirection = Components::ENTITY_FACING::LEFT;
+  }
+
+  if (this->right) {
+    this->m_velocity.x = this->m_speed;
+    this->m_state = Components::ENTITY_STATE::WALKING_RIGHT;
+    this->m_facingDirection = Components::ENTITY_FACING::RIGHT;
+  }
+
+  if (!this->left && !this->right) {
+    this->m_velocity.x = 0;
+    this->m_state = Components::ENTITY_STATE::STILL;
+  }
+
+  if (this->up) {
+    m_grounded = false;
+    if (this->m_jumpedDistance <= 60) {
+      this->m_velocity.y = -20;
+      this->m_jumpedDistance += 20;
+    }
+  } else if (this->m_grounded)
+    this->m_jumpedDistance = 0;
+
+  if (this->attacking) {
+    this->m_state = Components::ENTITY_STATE::ATTACKING;
+  }
 }
 
 auto
-Entity::getGrounded() const -> bool
+Entity::m_isMoving() -> bool
 {
-  return this->m_grounded;
+  return this->up || this->down || this->left || this->right;
 }
+
+auto
+Entity::m_manageGravity() -> void
+{
+  this->m_velocity.y += this->m_gravity;
+  if (std::abs(this->m_velocity.y) > this->m_maxYVelocity) {
+    float yDir = this->m_velocity.y < 0 ? -1 : 1;
+    this->m_velocity.y = this->m_maxYVelocity * yDir;
+  }
+
+  this->m_velocity.y *= this->m_drag;
+
+  if (std::abs(this->m_velocity.y) < this->m_minVelocity) {
+    this->m_velocity.y = 0;
+  }
+}
+
 }

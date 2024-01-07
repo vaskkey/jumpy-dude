@@ -9,29 +9,14 @@ Animation::Animation()
 }
 
 auto
-Animation::animate(const ENTITY_STATE& state) -> Animation*
+Animation::animate(ENTITY_STATE state, ENTITY_FACING direction) -> Animation*
 {
   if (this->m_animTimer.getElapsedTime().asMilliseconds() <
       this->m_animationTimeout)
     return this;
 
-  int frames = this->m_frames.at(state);
-  int offsetY = this->m_verticalOffset.at(state);
-  switch (state) {
-    case ENTITY_STATE::WALKING_LEFT:
-      this->m_scale = -1;
-      this->m_origin = this->m_sprite.getGlobalBounds().width;
-      this->m_walkingAnimation(frames, offsetY);
-      break;
-    case ENTITY_STATE::WALKING_RIGHT:
-      this->m_scale = 1;
-      this->m_origin = 0;
-      this->m_walkingAnimation(frames, offsetY);
-      break;
-    case ENTITY_STATE::STILL:
-      this->m_stillAnimation(frames, offsetY);
-      break;
-  }
+  this->m_setDirection(direction);
+  this->m_playAnimation(state);
 
   this->m_animTimer.restart();
   this->m_sprite.setTextureRect(this->m_intRect);
@@ -75,8 +60,11 @@ Animation::move(const sf::Vector2f& position) -> Animation*
 }
 
 auto
-Animation::m_walkingAnimation(int frames, int offsetY) -> void
+Animation::m_playAnimation(ENTITY_STATE state) -> void
 {
+  int frames = this->m_frames.at(state);
+  int offsetY = this->m_verticalOffset.at(state);
+
   if (++this->m_frame >= frames) {
     this->m_frame = 0;
   }
@@ -85,17 +73,6 @@ Animation::m_walkingAnimation(int frames, int offsetY) -> void
   this->m_intRect.top = this->m_intRect.height * offsetY;
   this->m_sprite.setScale(this->m_scale, 1);
   this->m_sprite.setOrigin(this->m_origin, 0);
-}
-
-auto
-Animation::m_stillAnimation(int frames, int offsetY) -> void
-{
-  if (++this->m_frame >= frames) {
-    this->m_frame = 0;
-  }
-
-  this->m_intRect.left = this->m_intRect.width * this->m_frame;
-  this->m_intRect.top = this->m_intRect.height * offsetY;
 }
 
 auto
@@ -108,9 +85,23 @@ Animation::setFrames(ENTITY_STATE state, int numOfFrames, int offsetY)
 }
 
 auto
-Animation::setAnimationTimeut(int timeout) -> Animation*
+Animation::setAnimationTimeout(int timeout) -> Animation*
 {
   this->m_animationTimeout = timeout;
   return this;
+}
+
+auto
+Animation::m_setDirection(ENTITY_FACING direction) -> void
+{
+  switch (direction) {
+    case ENTITY_FACING::LEFT:
+      this->m_scale = -1;
+      this->m_origin = this->m_sprite.getGlobalBounds().width;
+      break;
+    case ENTITY_FACING::RIGHT:
+      this->m_scale = 1;
+      this->m_origin = 0;
+  }
 }
 }

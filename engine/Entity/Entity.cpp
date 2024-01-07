@@ -1,4 +1,5 @@
 #include "Entity.hpp"
+#include "SFML/System/Vector2.hpp"
 #include <cstdlib>
 #include <iostream>
 
@@ -114,5 +115,17 @@ Entity::setBoundingBox(int width, int height) -> void
 {
   this->m_boundingBox.width = 56;
   this->m_boundingBox.height = 56;
+}
+
+auto
+Entity::position() const -> const sf::Vector2f&
+{
+  return this->m_position;
+}
+
+auto
+Entity::fixLeft() -> void
+{
+  this->m_position.x = 0;
 }
 }

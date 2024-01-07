@@ -1,7 +1,8 @@
+#include "../Physics/Physics.hpp"
 #include "Game.hpp"
+#include "SFML/Graphics/Rect.hpp"
 #include "SFML/Window/Event.hpp"
 #include "SFML/Window/VideoMode.hpp"
-#include "../Physics/Physics.hpp"
 
 namespace Engine {
 Game::Game()
@@ -13,10 +14,12 @@ Game::Game()
   this->m_entityFactory.createEntity(ENTITY_TYPE::MUSHROOM);
 
   this->m_worldTexture.loadFromFile("static/background_layer_1.png");
+  this->m_worldTexture.setRepeated(true);
   this->m_worldBg.setTexture(this->m_worldTexture);
   this->m_worldBg.scale(3.5, 3.5);
 
-  this->m_player->land(this->m_window.getSize().y - this->m_player->getBox().height);
+  this->m_player->land(this->m_window.getSize().y -
+                       this->m_player->getBox().height);
 }
 
 auto
@@ -24,9 +27,9 @@ Game::loop() -> void
 {
   while (this->m_window.isOpen()) {
     this->m_handleEvents();
-    this->m_updatePlayer();
 
     this->m_entityFactory.updateEntities(this->m_window);
+    this->m_updateView();
 
     this->m_draw();
   }
@@ -67,11 +70,6 @@ Game::m_draw() -> void
 }
 
 auto
-Game::m_updatePlayer() -> void
-{
-}
-
-auto
 Game::m_handleKeyEvent(const sf::Keyboard::Key& key, bool value) -> void
 {
   switch (key) {
@@ -90,5 +88,15 @@ Game::m_handleKeyEvent(const sf::Keyboard::Key& key, bool value) -> void
     default:
       break;
   }
+}
+
+auto
+Game::m_updateView() -> void
+{
+  float cameraX = this->m_player->position().x - 100;
+  cameraX = cameraX < 0 ? 0 : cameraX;
+
+  this->m_view.reset(sf::FloatRect(cameraX, 0, 800, 600));
+  this->m_window.setView(this->m_view);
 }
 }

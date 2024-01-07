@@ -43,8 +43,10 @@ public:
 
   auto getState() const -> const Components::ENTITY_STATE&;
   auto getBox() const -> const sf::FloatRect&;
+  auto position() const -> const sf::Vector2f&;
 
   auto land(float yPos) -> void;
+  auto fixLeft() -> void;
   auto setBoundingBox(int width, int height) -> void;
 
 private:

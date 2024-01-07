@@ -11,10 +11,12 @@ namespace Engine {
 class Game
 {
   sf::RenderWindow m_window;
+  sf::View m_view;
   sf::Texture m_worldTexture;
   sf::Sprite m_worldBg;
   EntityFactory m_entityFactory;
   Entity* m_player;
+  float x = 0;
 
 public:
   Game();
@@ -24,7 +26,7 @@ public:
 private:
   auto m_handleEvents() -> void;
   auto m_draw() -> void;
-  auto m_updatePlayer() -> void;
+  auto m_updateView() -> void;
   auto m_handleKeyEvent(const sf::Keyboard::Key& key, bool value) -> void;
 };
 }

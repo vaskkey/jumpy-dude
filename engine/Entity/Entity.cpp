@@ -1,4 +1,6 @@
 #include "Entity.hpp"
+#include "SFML/Graphics/Color.hpp"
+#include "SFML/Graphics/RectangleShape.hpp"
 #include "SFML/System/Vector2.hpp"
 #include <cstdlib>
 #include <iostream>
@@ -15,6 +17,13 @@ Entity::render(sf::RenderTarget& target) -> void
 {
   this->c_animation.animate(this->getState())->move(this->m_position);
   target.draw(this->c_animation.getSprite());
+  // auto box = sf::RectangleShape();
+  // box.setPosition(this->m_boundingBox.getPosition());
+  // box.setSize(this->m_boundingBox.getSize());
+  // box.setFillColor(sf::Color::Transparent);
+  // box.setOutlineColor(sf::Color::Red);
+  // box.setOutlineThickness(1);
+  // target.draw(box);
 }
 
 auto
@@ -30,7 +39,7 @@ Entity::m_move() -> void
 {
   this->m_setSpeed();
   this->m_manageGravity();
-  this->m_position += this->m_velocity;
+  this->moveBy(this->m_velocity);
 
   this->m_boundingBox.left = this->m_position.x;
   this->m_boundingBox.top = this->m_position.y;
@@ -55,9 +64,9 @@ Entity::m_setSpeed() -> void
   }
 
   if (this->up) {
+    m_grounded = false;
     if (this->m_jumpedDistance <= 60) {
       this->m_velocity.y = -20;
-      m_grounded = false;
       this->m_jumpedDistance += 20;
     }
   } else if (this->m_grounded) {
@@ -80,9 +89,6 @@ Entity::getState() const -> const Components::ENTITY_STATE&
 auto
 Entity::m_manageGravity() -> void
 {
-  if (m_grounded)
-    return;
-
   this->m_velocity.y += this->m_gravity;
   if (std::abs(this->m_velocity.y) > this->m_maxYVelocity) {
     float yDir = this->m_velocity.y < 0 ? -1 : 1;
@@ -103,9 +109,32 @@ Entity::getBox() const -> const sf::FloatRect&
 }
 
 auto
-Entity::land(float yPos) -> void
+Entity::getPreviousBox() const -> const sf::FloatRect&
 {
-  this->m_position.y = yPos;
+  return this->m_prevBox;
+}
+
+auto
+Entity::moveTo(const sf::Vector2f& position) -> void
+{
+  this->m_position = position;
+  this->m_prevBox = this->m_boundingBox;
+  this->m_boundingBox.left = this->m_position.x;
+  this->m_boundingBox.top = this->m_position.y;
+}
+
+auto
+Entity::moveBy(const sf::Vector2f& distance) -> void
+{
+  this->m_position += distance;
+  this->m_prevBox = this->m_boundingBox;
+  this->m_boundingBox.left = this->m_position.x;
+  this->m_boundingBox.top = this->m_position.y;
+}
+
+auto
+Entity::land() -> void
+{
   this->m_velocity.y = 0;
   this->m_grounded = true;
 }
@@ -113,8 +142,8 @@ Entity::land(float yPos) -> void
 auto
 Entity::setBoundingBox(int width, int height) -> void
 {
-  this->m_boundingBox.width = 56;
-  this->m_boundingBox.height = 56;
+  this->m_boundingBox.width = width;
+  this->m_boundingBox.height = height;
 }
 
 auto
@@ -124,8 +153,14 @@ Entity::position() const -> const sf::Vector2f&
 }
 
 auto
-Entity::fixLeft() -> void
+Entity::velocity() const -> const sf::Vector2f&
 {
-  this->m_position.x = 0;
+  return this->m_velocity;
+}
+
+auto
+Entity::getGrounded() const -> bool
+{
+  return this->m_grounded;
 }
 }

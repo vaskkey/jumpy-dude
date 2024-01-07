@@ -15,6 +15,8 @@ class Entity
   sf::Vector2f m_position;
   sf::Vector2f m_velocity;
   sf::FloatRect m_boundingBox;
+  // Mostly needed for position, for collisions
+  sf::FloatRect m_prevBox;
 
   Components::ENTITY_STATE m_state = Components::ENTITY_STATE::STILL;
 
@@ -43,10 +45,15 @@ public:
 
   auto getState() const -> const Components::ENTITY_STATE&;
   auto getBox() const -> const sf::FloatRect&;
+  auto getPreviousBox() const -> const sf::FloatRect&;
   auto position() const -> const sf::Vector2f&;
+  auto getGrounded() const -> bool;
+  auto velocity() const -> const sf::Vector2f&;
 
-  auto land(float yPos) -> void;
-  auto fixLeft() -> void;
+  auto moveTo(const sf::Vector2f& position) -> void;
+  auto moveBy(const sf::Vector2f& distance) -> void;
+  auto land() -> void;
+
   auto setBoundingBox(int width, int height) -> void;
 
 private:

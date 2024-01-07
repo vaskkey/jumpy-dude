@@ -1,6 +1,7 @@
 #include "../Physics/Physics.hpp"
 #include "Game.hpp"
 #include "SFML/Graphics/Rect.hpp"
+#include "SFML/System/Vector2.hpp"
 #include "SFML/Window/Event.hpp"
 #include "SFML/Window/VideoMode.hpp"
 
@@ -10,6 +11,8 @@ Game::Game()
   this->m_window.create(sf::VideoMode(800, 600), "Jumpy Dude");
   this->m_window.setFramerateLimit(60);
 
+  this->m_tileManager.createTile(TILE_TYPE::BASIC);
+
   this->m_player = this->m_entityFactory.createEntity(ENTITY_TYPE::PLAYER);
   this->m_entityFactory.createEntity(ENTITY_TYPE::MUSHROOM);
 
@@ -17,9 +20,6 @@ Game::Game()
   this->m_worldTexture.setRepeated(true);
   this->m_worldBg.setTexture(this->m_worldTexture);
   this->m_worldBg.scale(3.5, 3.5);
-
-  this->m_player->land(this->m_window.getSize().y -
-                       this->m_player->getBox().height);
 }
 
 auto
@@ -29,6 +29,7 @@ Game::loop() -> void
     this->m_handleEvents();
 
     this->m_entityFactory.updateEntities(this->m_window);
+    Physics::manageTileMapCollision(this->m_entityFactory, this->m_tileManager);
     this->m_updateView();
 
     this->m_draw();
@@ -64,6 +65,7 @@ Game::m_draw() -> void
   this->m_window.clear();
 
   this->m_window.draw(this->m_worldBg);
+  this->m_tileManager.renderTiles(this->m_window);
   this->m_entityFactory.renderEntities(this->m_window);
 
   this->m_window.display();

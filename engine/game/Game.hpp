@@ -2,6 +2,8 @@
 
 #include "../Entity/Entity.hpp"
 #include "../EntityFactory/EntityFactory.hpp"
+#include "../TileManager/TileManager.hpp"
+
 #include "SFML/Graphics/RenderWindow.hpp"
 #include "SFML/Graphics/Sprite.hpp"
 #include "SFML/Graphics/Texture.hpp"
@@ -14,9 +16,11 @@ class Game
   sf::View m_view;
   sf::Texture m_worldTexture;
   sf::Sprite m_worldBg;
+
   EntityFactory m_entityFactory;
   Entity* m_player;
-  float x = 0;
+
+  TileManager m_tileManager;
 
 public:
   Game();

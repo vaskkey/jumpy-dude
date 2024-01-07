@@ -24,6 +24,29 @@ EntityFactory::createEntity(ENTITY_TYPE type) -> Entity*
 }
 
 auto
+EntityFactory::renderEntities(sf::RenderTarget& target) const -> void
+{
+  for (auto entity : this->m_entities) {
+    entity->render(target);
+  }
+}
+
+auto
+EntityFactory::updateEntities(sf::RenderWindow& window) -> void
+{
+  for (auto entity : this->m_entities) {
+    Physics::manageWindowCollision(window, *entity);
+    entity->update();
+  }
+}
+
+auto
+EntityFactory::getEntities() const -> const std::vector<Entity*>&
+{
+  return this->m_entities;
+}
+
+auto
 EntityFactory::m_getPlayer() -> Entity*
 {
   auto player = new Entity(3);
@@ -64,20 +87,4 @@ EntityFactory::m_getMushroom() -> Entity*
   return mushroom;
 }
 
-auto
-EntityFactory::renderEntities(sf::RenderTarget& target) -> void
-{
-  for (auto entity : this->m_entities) {
-    entity->render(target);
-  }
-}
-
-auto
-EntityFactory::updateEntities(sf::RenderWindow& window) -> void
-{
-  for (auto entity : this->m_entities) {
-    Physics::manageWindowCollision(window, *entity);
-    entity->update();
-  }
-}
 }

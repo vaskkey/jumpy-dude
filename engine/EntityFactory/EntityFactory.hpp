@@ -20,8 +20,10 @@ public:
   ~EntityFactory();
 
   auto createEntity(ENTITY_TYPE type) -> Entity*;
-  auto renderEntities(sf::RenderTarget& target) -> void;
+  auto renderEntities(sf::RenderTarget& target) const -> void;
   auto updateEntities(sf::RenderWindow& window) -> void;
+
+  auto getEntities() const -> const std::vector<Entity*>&;
 
 private:
   auto m_getPlayer() -> Entity*;

@@ -1,5 +1,5 @@
-#include "../Physics/Physics.hpp"
 #include "EntityFactory.hpp"
+#include "../Physics/Physics.hpp"
 #include "SFML/Graphics/Color.hpp"
 #include "SFML/System/Vector2.hpp"
 #include <__algorithm/remove.h>

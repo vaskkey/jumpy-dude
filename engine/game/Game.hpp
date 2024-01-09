@@ -10,27 +10,55 @@
 #include "SFML/Window/Keyboard.hpp"
 
 namespace Engine {
+/**
+ * Game class representing the main game loop and logic.
+ */
 class Game
 {
-  sf::RenderWindow m_window;
-  sf::View m_view;
-  sf::Texture m_worldTexture;
-  sf::Sprite m_worldBg;
+  sf::RenderWindow m_window;  /**< Render window for the game. */
+  sf::View m_view;            /**< View for the game. */
+  sf::Texture m_worldTexture; /**< Texture for the game world. */
+  sf::Sprite m_worldBg;       /**< Background sprite for the game world. */
 
-  EntityFactory m_entityFactory;
-  Entity* m_player;
+  EntityFactory m_entityFactory; /**< Entity factory for creating entities. */
+  Entity* m_player;              /**< Pointer to the player entity. */
 
-  TileManager m_tileManager;
+  TileManager m_tileManager; /**< Tile manager for managing game tiles. */
 
 public:
+  /**
+   * Constructor for the Game class.
+   */
   Game();
 
+  /**
+   * Main game loop.
+   */
   auto loop() -> void;
 
 private:
+  /**
+   * Handles events in the game.
+   */
   auto m_handleEvents() -> void;
+
+  /**
+   * Draws the game.
+   */
   auto m_draw() -> void;
+
+  /**
+   * Updates the view of the game.
+   */
   auto m_updateView() -> void;
+
+  /**
+   * Handles a key event.
+   *
+   * @param key The key that was pressed or released.
+   * @param value The value indicating if the key was pressed or released.
+   */
   auto m_handleKeyEvent(const sf::Keyboard::Key& key, bool value) -> void;
 };
+
 }

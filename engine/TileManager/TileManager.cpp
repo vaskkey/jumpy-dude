@@ -1,5 +1,5 @@
-#include "SFML/Graphics/RenderTarget.hpp"
 #include "TileManager.hpp"
+#include "SFML/Graphics/RenderTarget.hpp"
 
 namespace Engine {
 

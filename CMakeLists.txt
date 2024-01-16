@@ -18,6 +18,8 @@ file(GLOB engine_SRC
      "Engine/**/*.cpp"
      "Engine/Components/**/*.hpp"
      "Engine/Components/**/*.cpp"
+     "Engine/AI/**/*.hpp"
+     "Engine/AI/**/*.cpp"
 )
 
 add_executable(jumpydude main.cpp ${engine_SRC})

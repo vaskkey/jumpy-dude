@@ -150,6 +150,14 @@ public:
    */
   auto takeDamage(int damage) -> void;
 
+
+  /**
+   * Gets Entity's current position
+   *
+   * @return Vector representing current position
+   */
+  auto getPosition() const -> const sf::Vector2f&;
+
 private:
   /**
    * Moves the entity based on its velocity.
@@ -171,7 +179,7 @@ private:
    *
    * @return True if the entity is moving, false otherwise.
    */
-  auto m_isMoving() -> bool;
+  auto m_isMoving() const -> bool;
 };
 
 }

@@ -1,5 +1,5 @@
-#include "Game.hpp"
 #include "../Physics/Physics.hpp"
+#include "Game.hpp"
 #include "SFML/Graphics/Rect.hpp"
 #include "SFML/System/Vector2.hpp"
 #include "SFML/Window/Event.hpp"
@@ -15,7 +15,7 @@ Game::Game()
   this->m_tileManager.createTile(TILE_TYPE::BASIC);
 
   this->m_player = this->m_entityFactory.createEntity(ENTITY_TYPE::PLAYER);
-  this->m_entityFactory.createEntity(ENTITY_TYPE::MUSHROOM);
+  this->m_entityFactory.createEntity(ENTITY_TYPE::MUSHROOM, 500, 600);
 
   this->m_worldTexture.loadFromFile("static/background_layer_1.png");
   this->m_worldTexture.setRepeated(true);
@@ -29,7 +29,7 @@ Game::loop() -> void
   while (this->m_window.isOpen()) {
     this->m_handleEvents();
 
-    this->m_entityFactory.updateEntities(this->m_window);
+    this->m_entityFactory.updateEntities(this->m_window, this->m_player);
     Physics::manageTileMapCollision(this->m_entityFactory, this->m_tileManager);
     this->m_updateView();
 
@@ -104,4 +104,5 @@ Game::m_updateView() -> void
   this->m_view.reset(sf::FloatRect(cameraX, 0, 800, 600));
   this->m_window.setView(this->m_view);
 }
+
 }

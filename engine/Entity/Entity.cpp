@@ -114,6 +114,12 @@ Entity::setBoundingBox(int width, int height) -> void
 }
 
 auto
+Entity::getPosition() const -> const sf::Vector2f&
+{
+  return this->m_position;
+}
+
+auto
 Entity::m_move() -> void
 {
   this->m_manageGravity();
@@ -158,7 +164,7 @@ Entity::m_setState() -> void
 }
 
 auto
-Entity::m_isMoving() -> bool
+Entity::m_isMoving() const -> bool
 {
   return this->up || this->down || this->left || this->right;
 }
@@ -178,5 +184,4 @@ Entity::m_manageGravity() -> void
     this->m_velocity.y = 0;
   }
 }
-
 }

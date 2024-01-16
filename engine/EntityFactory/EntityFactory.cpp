@@ -1,5 +1,5 @@
-#include "EntityFactory.hpp"
 #include "../Physics/Physics.hpp"
+#include "EntityFactory.hpp"
 #include "SFML/Graphics/Color.hpp"
 #include "SFML/System/Vector2.hpp"
 #include <__algorithm/remove.h>
@@ -30,6 +30,16 @@ EntityFactory::createEntity(ENTITY_TYPE type) -> Entity*
 }
 
 auto
+EntityFactory::createEntity(ENTITY_TYPE type, float from, float to) -> Entity*
+{
+  auto entity = this->createEntity(type);
+  auto mushroomAI = new AI::Enemy(entity);
+  mushroomAI->setPatrol(from, to);
+  this->m_enemies.push_back(mushroomAI);
+  return entity;
+}
+
+auto
 EntityFactory::renderEntities(sf::RenderTarget& target) const -> void
 {
   for (auto entity : this->m_entities) {
@@ -38,14 +48,19 @@ EntityFactory::renderEntities(sf::RenderTarget& target) const -> void
 }
 
 auto
-EntityFactory::updateEntities(sf::RenderWindow& window) -> void
+EntityFactory::updateEntities(sf::RenderWindow& window, Entity* player) -> void
 {
   this->m_cleanupDeadEntities();
+
+  std::for_each(this->m_enemies.begin(), this->m_enemies.end(), [](auto enemy) {
+    enemy->patrol();
+  });
 
   for (auto entity : this->m_entities) {
     Physics::manageWindowCollision(window, *entity);
 
     entity->update();
+    this->m_managePlayerDamage(player, entity);
 
     if (entity->getState() == Components::ENTITY_STATE::ATTACKING) {
       this->m_manageAttacks(entity);
@@ -84,7 +99,7 @@ EntityFactory::m_getPlayer() -> Entity*
 auto
 EntityFactory::m_getMushroom() -> Entity*
 {
-  auto mushroom = new Entity(2, 0, 50);
+  auto mushroom = new Entity(2, 1, 50);
   mushroom->setBoundingBox(56, 56);
   mushroom->c_animation.setTexture("static/mushroom-1.png")
     ->setTextureSize(56, 56)
@@ -98,6 +113,7 @@ EntityFactory::m_getMushroom() -> Entity*
     ->animate(mushroom->getState(), mushroom->getFacingDirection());
 
   this->m_entities.push_back(mushroom);
+
   return mushroom;
 }
 
@@ -125,18 +141,47 @@ EntityFactory::m_manageAttacks(Entity* entity) -> void
 }
 
 auto
+EntityFactory::m_managePlayerDamage(Entity* player, Entity* entity) -> void
+{
+  if (player == entity)
+    return;
+
+  if (Physics::isColliding(player->getBox(), entity->getBox())) {
+    player->hp -= entity->DAMAGE;
+  }
+}
+
+auto
 EntityFactory::m_cleanupDeadEntities() -> void
 {
   auto iter = std::remove_if(
-    this->m_entities.begin(), this->m_entities.end(), [](auto ent) -> bool {
+    this->m_entities.begin(), this->m_entities.end(), [this](auto ent) -> bool {
       bool toBeDeleted = ent->hp <= 0;
 
-      if (toBeDeleted)
+      if (toBeDeleted) {
+        this->m_removeEnemy(ent);
         delete ent;
+      }
 
       return toBeDeleted;
     });
 
   this->m_entities.erase(iter, this->m_entities.end());
+}
+
+auto
+EntityFactory::m_removeEnemy(Entity* ent) -> void
+{
+  auto iter = std::remove_if(
+    this->m_enemies.begin(), this->m_enemies.end(), [ent](auto enemy) -> bool {
+      bool toBeDeleted = *enemy == ent;
+
+      if (toBeDeleted)
+        delete enemy;
+
+      return toBeDeleted;
+    });
+
+  this->m_enemies.erase(iter, this->m_enemies.end());
 }
 }

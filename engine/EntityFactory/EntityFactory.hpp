@@ -1,5 +1,6 @@
 #pragma once
 
+#include "../AI/Enemy/Enemy.hpp"
 #include "../Entity/Entity.hpp"
 #include "SFML/Graphics/RectangleShape.hpp"
 #include "SFML/Graphics/RenderWindow.hpp"
@@ -18,6 +19,7 @@ enum ENTITY_TYPE
 class EntityFactory
 {
   std::vector<Entity*> m_entities;
+  std::vector<AI::Enemy*> m_enemies; /**< A vector of Enemy AI's */
 
 public:
   EntityFactory();
@@ -32,6 +34,16 @@ public:
   auto createEntity(ENTITY_TYPE type) -> Entity*;
 
   /**
+   * Creates an entity of the specified type.
+   *
+   * @param type The type of entity to create.
+   * @param from Where entity starts
+   * @param to To which point entity patrols
+   * @return Pointer to the created entity.
+   */
+  auto createEntity(ENTITY_TYPE type, float from, float to) -> Entity*;
+
+  /**
    * Renders all entities on the specified render target.
    *
    * @param target The render target to render the entities on.
@@ -42,8 +54,9 @@ public:
    * Updates all entities based on the specified window.
    *
    * @param window The window used for updating the entities.
+   * @param player Player entity
    */
-  auto updateEntities(sf::RenderWindow& window) -> void;
+  auto updateEntities(sf::RenderWindow& window, Entity* player) -> void;
 
   /**
    * Retrieves the vector of entities created by the factory.
@@ -75,9 +88,22 @@ private:
   auto m_manageAttacks(Entity* entity) -> void;
 
   /**
+   * Manage player taking damage
+   *
+   * @param player The player to deal damage to
+   * @param entity The entity to manage attacks for.
+   */
+  auto m_managePlayerDamage(Entity* player, Entity* entity) -> void;
+
+  /**
    * Cleans up and removes dead entities from the vector.
    */
   auto m_cleanupDeadEntities() -> void;
+
+  /**
+   * Removes AI for dead entities
+   */
+  auto m_removeEnemy(Entity* ent) -> void;
 };
 
 }

@@ -1,17 +1,15 @@
-#include "Tile.hpp"
 #include "SFML/Graphics/Color.hpp"
 #include "SFML/Graphics/Rect.hpp"
 #include "SFML/System/Vector2.hpp"
+#include "Tile.hpp"
 #include <iostream>
 
 namespace Engine {
 
-Tile::Tile()
-  : m_position(200, 550)
-  , m_boundingBox(m_position, sf::Vector2f(100, 10))
+Tile::Tile(const sf::Vector2f& position)
+  : m_position(position)
+  , m_boundingBox(m_position, { 0, 0 })
 {
-  this->m_texture.loadFromFile("static/tileset.png");
-  this->m_sprite.setTextureRect(sf::IntRect(0, 0, 96, 23));
   this->m_sprite.setTexture(this->m_texture);
 }
 
@@ -26,5 +24,30 @@ auto
 Tile::getBox() const -> const sf::FloatRect&
 {
   return this->m_boundingBox;
+}
+
+auto
+Tile::setTexture(std::string name) -> Tile*
+{
+  this->m_texture.loadFromFile(name);
+
+  return this;
+}
+
+auto
+Tile::setBox(const sf::Vector2f& size) -> Tile*
+{
+  this->m_boundingBox.width = size.x;
+  this->m_boundingBox.height = size.y;
+
+  return this;
+}
+
+auto
+Tile::setTextureBox(const sf::IntRect& rect) -> Tile*
+{
+  this->m_sprite.setTextureRect(rect);
+
+  return this;
 }
 }

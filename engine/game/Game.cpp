@@ -12,7 +12,7 @@ Game::Game()
   this->m_window.create(sf::VideoMode(800, 600), "Jumpy Dude");
   this->m_window.setFramerateLimit(60);
 
-  this->m_tileManager.createTile(TILE_TYPE::BASIC);
+  this->m_tileManager.init();
 
   this->m_player = this->m_entityFactory.createEntity(ENTITY_TYPE::PLAYER);
   this->m_entityFactory.createEntity(ENTITY_TYPE::MUSHROOM, 500, 600);

@@ -23,7 +23,7 @@ public:
   /**
    * Constructor for the Tile class.
    */
-  Tile();
+  Tile(const sf::Vector2f& position);
 
   /**
    * Renders the tile on the specified render target.
@@ -38,6 +38,30 @@ public:
    * @return The bounding box of the tile.
    */
   auto getBox() const -> const sf::FloatRect&;
+
+  /**
+   * Sets the texture of the tile.
+   *
+   * @param name Name of texture file.
+   * @return The Tile.
+   */
+  auto setTexture(std::string name) -> Tile*;
+
+  /**
+   * Sets the bounding box of the tile.
+   *
+   * @param size Size of a bounding box.
+   * @return The Tile.
+   */
+  auto setBox(const sf::Vector2f& size) -> Tile*;
+
+  /**
+   * Sets texture rectangle, used for sprites that have more than one tile on them.
+   *
+   * @param rect Rectangle with size and position of texture on the sprite
+   * @return The Tile
+   */
+  auto setTextureBox(const sf::IntRect& rect) -> Tile*;
 };
 
 }

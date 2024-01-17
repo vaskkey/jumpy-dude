@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../Tile/Tile.hpp"
+#include "SFML/System/Vector2.hpp"
 #include <vector>
 
 namespace Engine {
@@ -29,12 +30,18 @@ public:
   ~TileManager();
 
   /**
+   * Reads from map.txt config and creates tiles
+   */
+  auto init() -> void;
+
+  /**
    * Creates a tile of the specified type.
    *
    * @param type The type of tile to create.
+   * @param position Position of the Tile.
    * @return Pointer to the created tile.
    */
-  auto createTile(TILE_TYPE type) -> Tile*;
+  auto createTile(TILE_TYPE type, const sf::Vector2f& position) -> Tile*;
 
   /**
    * Renders all tiles on the specified render target.
@@ -54,9 +61,10 @@ private:
   /**
    * Creates a basic tile.
    *
+   * @param position Position of the Tile.
    * @return Pointer to the created basic tile.
    */
-  auto m_getBasic() -> Tile*;
+  auto m_getBasic(const sf::Vector2f& position) -> Tile*;
 };
 
 }

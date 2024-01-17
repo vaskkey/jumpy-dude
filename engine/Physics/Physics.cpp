@@ -1,3 +1,4 @@
+#include "../Config/Config.hpp"
 #include "Physics.hpp"
 #include "SFML/Graphics/Rect.hpp"
 #include "SFML/System/Vector2.hpp"
@@ -21,6 +22,7 @@ manageWindowCollision(const sf::RenderWindow& window, Entity& entity) -> void
   int winY = window.getSize().y;
   int entityBottom = entity.getBox().height + entity.getBox().top;
   int entityLeft = entity.getBox().left;
+  int entityRight = entity.getBox().left + entity.getBox().width;
 
   if (winY < entityBottom) {
     entity.moveTo(sf::Vector2f(entity.position().x,
@@ -30,6 +32,11 @@ manageWindowCollision(const sf::RenderWindow& window, Entity& entity) -> void
 
   if (entityLeft < 0) {
     entity.moveTo(sf::Vector2f(0, entity.position().y));
+  }
+
+  if (entityRight > Config::GAME_WIDTH) {
+    entity.moveTo(sf::Vector2f(Config::GAME_WIDTH - entity.getBox().width,
+                               entity.position().y));
   }
 }
 

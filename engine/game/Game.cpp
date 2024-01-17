@@ -1,4 +1,5 @@
 #include "../Physics/Physics.hpp"
+#include "../Config/Config.hpp"
 #include "Game.hpp"
 #include "SFML/Graphics/Rect.hpp"
 #include "SFML/System/Vector2.hpp"
@@ -21,6 +22,7 @@ Game::Game()
   this->m_worldTexture.setRepeated(true);
   this->m_worldBg.setTexture(this->m_worldTexture);
   this->m_worldBg.scale(3.5, 3.5);
+  this->m_worldBg.setTextureRect(sf::IntRect(0, 0, 640, 180));
 }
 
 auto
@@ -99,6 +101,11 @@ auto
 Game::m_updateView() -> void
 {
   float cameraX = this->m_player->position().x - 100;
+  float desiredPos = Config::GAME_WIDTH - 600;
+
+  if (cameraX > desiredPos)
+    return;
+
   cameraX = cameraX < 0 ? 0 : cameraX;
 
   this->m_view.reset(sf::FloatRect(cameraX, 0, 800, 600));

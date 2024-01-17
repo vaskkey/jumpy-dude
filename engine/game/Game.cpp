@@ -1,5 +1,5 @@
-#include "../Physics/Physics.hpp"
 #include "../Config/Config.hpp"
+#include "../Physics/Physics.hpp"
 #include "Game.hpp"
 #include "SFML/Graphics/Rect.hpp"
 #include "SFML/System/Vector2.hpp"
@@ -15,14 +15,13 @@ Game::Game()
 
   this->m_tileManager.init();
 
-  this->m_player = this->m_entityFactory.createEntity(ENTITY_TYPE::PLAYER);
-  this->m_entityFactory.createEntity(ENTITY_TYPE::MUSHROOM, 500, 600);
+  this->m_player = this->m_entityFactory.init();
 
   this->m_worldTexture.loadFromFile("static/background_layer_1.png");
   this->m_worldTexture.setRepeated(true);
   this->m_worldBg.setTexture(this->m_worldTexture);
   this->m_worldBg.scale(3.5, 3.5);
-  this->m_worldBg.setTextureRect(sf::IntRect(0, 0, 640, 180));
+  this->m_worldBg.setTextureRect(sf::IntRect(0, 0, Config::GAME_WIDTH, 180));
 }
 
 auto

@@ -26,6 +26,12 @@ public:
   ~EntityFactory();
 
   /**
+   * Initiates entities from the file
+   *
+   */
+  auto init() -> Entity*;
+
+  /**
    * Creates an entity of the specified type.
    *
    * @param type The type of entity to create.

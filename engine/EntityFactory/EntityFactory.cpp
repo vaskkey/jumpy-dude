@@ -5,6 +5,7 @@
 #include <__algorithm/remove.h>
 #include <__algorithm/remove_if.h>
 #include <algorithm>
+#include <fstream>
 #include <iostream>
 
 namespace Engine {
@@ -16,6 +17,23 @@ EntityFactory::~EntityFactory()
   for (auto entity : this->m_entities) {
     delete entity;
   }
+}
+
+auto
+EntityFactory::init() -> Entity*
+{
+  auto player = this->createEntity(ENTITY_TYPE::PLAYER);
+  auto file = std::ifstream("entities.txt");
+
+  int t;
+  float from, to;
+
+  while (file >> t >> from >> to) {
+    auto type = static_cast<ENTITY_TYPE>(t);
+    this->createEntity(type, from, to);
+  }
+
+  return player;
 }
 
 auto
@@ -99,7 +117,7 @@ EntityFactory::m_getPlayer() -> Entity*
 auto
 EntityFactory::m_getMushroom() -> Entity*
 {
-  auto mushroom = new Entity(2, 1, 50);
+  auto mushroom = new Entity(2, 1, 10);
   mushroom->setBoundingBox(56, 56);
   mushroom->c_animation.setTexture("static/mushroom-1.png")
     ->setTextureSize(56, 56)

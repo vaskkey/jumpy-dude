@@ -1,6 +1,6 @@
 namespace Engine {
 struct Config
 {
-  static const int GAME_WIDTH = 1600;
+  static const int GAME_WIDTH = 2600;
 };
 };

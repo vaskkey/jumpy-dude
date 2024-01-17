@@ -15,12 +15,32 @@ TileManager::~TileManager()
 }
 
 auto
+TileManager::init() -> void
+{
+  auto file = std::ifstream("map.txt");
+
+  int t;
+  float x, y;
+
+  while (file >> t >> x >> y) {
+    auto type = static_cast<TILE_TYPE>(t);
+    this->createTile(type, { x, y });
+  }
+}
+
+auto
 TileManager::createTile(TILE_TYPE type, const sf::Vector2f& position) -> Tile*
 {
   switch (type) {
     case TILE_TYPE::BASIC:
       return this->m_getBasic(position);
-  }
+    case BASIC_FILL:
+      return this->m_getBasicFill(position);
+      break;
+    case BASIC_HALF:
+      return this->m_getBasicHalf(position);
+      break;
+    }
 }
 
 auto
@@ -43,7 +63,7 @@ TileManager::m_getBasic(const sf::Vector2f& position) -> Tile*
   auto basicTile = new Tile(position);
   basicTile->setTexture("static/tileset.png")
     ->setTextureBox(sf::IntRect(0, 0, 96, 23))
-    ->setBox({ 100, 10 });
+    ->setBox({ 96, 10 });
 
   this->m_tiles.push_back(basicTile);
 
@@ -51,16 +71,28 @@ TileManager::m_getBasic(const sf::Vector2f& position) -> Tile*
 }
 
 auto
-TileManager::init() -> void
+TileManager::m_getBasicFill(const sf::Vector2f& position) -> Tile*
 {
-  auto file = std::ifstream("map.txt");
+  auto basicTile = new Tile(position);
+  basicTile->setTexture("static/tileset.png")
+    ->setTextureBox(sf::IntRect(0, 25, 47, 23))
+    ->setBox({ 47, 10 });
 
-  int t;
-  float x, y;
+  this->m_tiles.push_back(basicTile);
 
-  while (file >> t >> x >> y) {
-    auto type = static_cast<TILE_TYPE>(t);
-    this->createTile(type, { x, y });
-  }
+  return basicTile;
+}
+
+auto
+TileManager::m_getBasicHalf(const sf::Vector2f& position) -> Tile*
+{
+  auto basicTile = new Tile(position);
+  basicTile->setTexture("static/tileset.png")
+    ->setTextureBox(sf::IntRect(0, 0, 47, 23))
+    ->setBox({ 50, 10 });
+
+  this->m_tiles.push_back(basicTile);
+
+  return basicTile;
 }
 }

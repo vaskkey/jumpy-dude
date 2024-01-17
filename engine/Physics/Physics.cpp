@@ -56,18 +56,17 @@ manageTileMapCollision(const Engine::EntityFactory& ef,
       auto prevOverlap =
         getCollisionOverlap(entity->getPreviousBox(), tile->getBox());
 
-      if (prevOverlap.y <= 0) {
+      if (prevOverlap.x <= 0) {
+        overlap.y = 0;
+        overlap.x *= entity->velocity().x > 0 ? -1 : 1;
+        entity->moveBy(overlap);
+      } else if (prevOverlap.y <= 0) {
         overlap.x = 0;
         overlap.y *= entity->velocity().y > 0 ? -1 : 1;
         entity->moveBy(overlap);
 
         if (overlap.y < 0)
           entity->land();
-
-      } else if (prevOverlap.x <= 0) {
-        overlap.y = 0;
-        overlap.x *= entity->velocity().x > 0 ? -1 : 1;
-        entity->moveBy(overlap);
       } else {
         entity->moveBy(overlap);
       }

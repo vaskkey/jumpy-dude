@@ -8,7 +8,9 @@ namespace Engine {
 
 enum TILE_TYPE
 {
-  BASIC
+  BASIC,
+  BASIC_FILL,
+  BASIC_HALF,
 };
 /**
  * TileManager class responsible for managing tiles in the game.
@@ -65,6 +67,22 @@ private:
    * @return Pointer to the created basic tile.
    */
   auto m_getBasic(const sf::Vector2f& position) -> Tile*;
+
+  /**
+   * Creates a basic fill tile.
+   *
+   * @param position Position of the Tile.
+   * @return Pointer to the created basic fill tile.
+   */
+  auto m_getBasicFill(const sf::Vector2f& position) -> Tile*;
+
+  /**
+   * Creates a basic half tile.
+   *
+   * @param position Position of the Tile.
+   * @return Pointer to the created basic half tile.
+   */
+  auto m_getBasicHalf(const sf::Vector2f& position) -> Tile*;
 };
 
 }

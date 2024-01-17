@@ -18,8 +18,8 @@ enum ENTITY_TYPE
 
 class EntityFactory
 {
-  std::vector<Entity*> m_entities;
-  std::vector<AI::Enemy*> m_enemies; /**< A vector of Enemy AI's */
+  std::vector<Entity*> m_entities;   /**< A vector of all entities. */
+  std::vector<AI::Enemy*> m_enemies; /**< A vector of Enemy AI's. */
 
 public:
   EntityFactory();

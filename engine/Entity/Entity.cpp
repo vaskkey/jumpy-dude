@@ -12,6 +12,7 @@ Entity::Entity(int speed, int damage, int hp)
   , DAMAGE(damage)
   , hp(hp)
 {
+  this->m_damageTimer.restart();
 }
 
 auto
@@ -97,6 +98,15 @@ Entity::moveBy(const sf::Vector2f& distance) -> void
   this->m_prevBox = this->m_boundingBox;
   this->m_boundingBox.left = this->m_position.x;
   this->m_boundingBox.top = this->m_position.y;
+}
+
+auto
+Entity::takeDamage(int damage) -> void
+{
+  if (this->m_damageTimer.getElapsedTime().asMilliseconds() < 1000)
+    return;
+  this->m_damageTimer.restart();
+  this->hp -= damage;
 }
 
 auto

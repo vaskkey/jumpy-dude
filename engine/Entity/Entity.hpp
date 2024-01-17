@@ -17,6 +17,7 @@ class Entity
   sf::Vector2f m_velocity;     /**< The velocity of the entity. */
   sf::FloatRect m_boundingBox; /**< The bounding box of the entity. */
   sf::FloatRect m_prevBox;     /**< The previous bounding box of the entity. */
+  sf::Clock m_damageTimer;     /**< Timer for entity taking damage */
 
   Components::ENTITY_STATE m_state =
     Components::ENTITY_STATE::STILL; /**< The state of the entity. */
@@ -149,7 +150,6 @@ public:
    * @param damage The amount of damage to inflict.
    */
   auto takeDamage(int damage) -> void;
-
 
   /**
    * Gets Entity's current position

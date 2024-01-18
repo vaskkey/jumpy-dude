@@ -1,7 +1,10 @@
 #include "../Config/Config.hpp"
 #include "../Physics/Physics.hpp"
 #include "Game.hpp"
+#include "SFML/Graphics/Color.hpp"
+#include "SFML/Graphics/Font.hpp"
 #include "SFML/Graphics/Rect.hpp"
+#include "SFML/Graphics/Text.hpp"
 #include "SFML/System/Vector2.hpp"
 #include "SFML/Window/Event.hpp"
 #include "SFML/Window/Keyboard.hpp"
@@ -12,6 +15,11 @@ Game::Game()
 {
   this->m_window.create(sf::VideoMode(800, 600), "Jumpy Dude");
   this->m_window.setFramerateLimit(60);
+
+  this->m_font.loadFromFile("static/RubikBurned-Regular.ttf");
+  this->m_hpText.setFont(this->m_font);
+  this->m_hpText.setCharacterSize(30);
+  this->m_hpText.setFillColor(sf::Color::Red);
 
   this->m_tileManager.init();
 
@@ -69,6 +77,7 @@ Game::m_draw() -> void
   this->m_window.draw(this->m_worldBg);
   this->m_tileManager.renderTiles(this->m_window);
   this->m_entityFactory.renderEntities(this->m_window);
+  this->m_updateUI();
 
   this->m_window.display();
 }
@@ -102,13 +111,23 @@ Game::m_updateView() -> void
   float cameraX = this->m_player->position().x - 100;
   float desiredPos = Config::GAME_WIDTH - 600;
 
-  if (cameraX > desiredPos)
+  if (cameraX > desiredPos) {
+    this->m_cameraX = desiredPos;
     return;
+  }
 
-  cameraX = cameraX < 0 ? 0 : cameraX;
+  this->m_cameraX = cameraX < 0 ? 0 : cameraX;
 
-  this->m_view.reset(sf::FloatRect(cameraX, 0, 800, 600));
+  this->m_view.reset(sf::FloatRect(this->m_cameraX, 0, 800, 600));
   this->m_window.setView(this->m_view);
+}
+
+auto
+Game::m_updateUI() -> void
+{
+  this->m_hpText.setString(std::to_string(this->m_player->hp));
+  this->m_hpText.setPosition({ this->m_cameraX + 50, 50 });
+  this->m_window.draw(this->m_hpText);
 }
 
 }

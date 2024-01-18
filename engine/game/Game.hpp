@@ -4,8 +4,10 @@
 #include "../EntityFactory/EntityFactory.hpp"
 #include "../TileManager/TileManager.hpp"
 
+#include "SFML/Graphics/Font.hpp"
 #include "SFML/Graphics/RenderWindow.hpp"
 #include "SFML/Graphics/Sprite.hpp"
+#include "SFML/Graphics/Text.hpp"
 #include "SFML/Graphics/Texture.hpp"
 #include "SFML/Window/Keyboard.hpp"
 
@@ -22,8 +24,11 @@ class Game
 
   EntityFactory m_entityFactory; /**< Entity factory for creating entities. */
   Entity* m_player;              /**< Pointer to the player entity. */
+  TileManager m_tileManager;     /**< Tile manager for managing game tiles. */
 
-  TileManager m_tileManager; /**< Tile manager for managing game tiles. */
+  sf::Text m_hpText; /**< UI Text telling how much HP player has */
+  sf::Font m_font;   /**< UI font */
+  float m_cameraX;     /** X position of the Camera */
 
 public:
   /**
@@ -51,6 +56,14 @@ private:
    * Updates the view of the game.
    */
   auto m_updateView() -> void;
+
+  /**
+   * Updates UI data.
+   * e.g. HP.
+   *
+   * x Position of a camera
+   */
+  auto m_updateUI() -> void;
 
   /**
    * Handles a key event.

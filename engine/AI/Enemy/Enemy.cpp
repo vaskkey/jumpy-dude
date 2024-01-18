@@ -1,5 +1,7 @@
+#include "../../Physics/Physics.hpp"
 #include "Enemy.hpp"
 #include "SFML/System/Vector2.hpp"
+#include <iostream>
 
 namespace Engine {
 
@@ -25,6 +27,25 @@ Enemy::patrol() -> void
 {
   if (this->m_patrolling) {
     m_manageDirection();
+  } else {
+    this->m_entity->left = false;
+    this->m_entity->right = false;
+  }
+}
+
+auto
+Enemy::manageAttackingRange(Entity* player) -> void
+{
+  if (!this->m_entity->getCanAttack())
+    return;
+
+  if (Physics::isColliding(player->getBox(),
+                           this->m_entity->getAttackRange())) {
+    this->m_entity->attacking = true;
+    this->m_patrolling = false;
+  } else {
+    this->m_entity->attacking = false;
+    this->m_patrolling = true;
   }
 }
 

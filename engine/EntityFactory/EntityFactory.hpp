@@ -13,7 +13,8 @@ namespace Engine {
 enum ENTITY_TYPE
 {
   PLAYER,
-  MUSHROOM
+  MUSHROOM,
+  SKELETON
 };
 
 class EntityFactory
@@ -85,6 +86,13 @@ private:
    * @return Pointer to the created mushroom entity.
    */
   auto m_getMushroom() -> Entity*;
+
+  /**
+   * Creates a new skeleton entity.
+   *
+   * @return Pointer to the created skeleton entity.
+   */
+  auto m_getSkeleton() -> Entity*;
 
   /**
    * Manages the attacks of the specified entity.

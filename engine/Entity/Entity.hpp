@@ -13,11 +13,15 @@ namespace Engine {
  */
 class Entity
 {
-  sf::Vector2f m_position;     /**< The position of the entity. */
-  sf::Vector2f m_velocity;     /**< The velocity of the entity. */
+  sf::Vector2f m_position; /**< The position of the entity. */
+  sf::Vector2f m_velocity; /**< The velocity of the entity. */
+  sf::FloatRect
+    m_attackReach; /**< Box which will trigger attack upon collision. */
   sf::FloatRect m_boundingBox; /**< The bounding box of the entity. */
   sf::FloatRect m_prevBox;     /**< The previous bounding box of the entity. */
-  sf::Clock m_damageTimer;     /**< Timer for entity taking damage */
+  sf::Clock m_damageTimer;     /**< Timer for entity taking damage. */
+  bool m_canAttack; /**< Defines whether this entity has attack capabilities.
+                       Used by AI and does not apply to player */
 
   Components::ENTITY_STATE m_state =
     Components::ENTITY_STATE::STILL; /**< The state of the entity. */
@@ -157,6 +161,37 @@ public:
    * @return Vector representing current position
    */
   auto getPosition() const -> const sf::Vector2f&;
+
+  /**
+   * Gets Entity's attacking capabilities.
+   *
+   * @return True if entity can attack
+   */
+  auto getCanAttack() const -> bool;
+
+  /**
+   * Sets Entity's attacking capabilities.
+   *
+   * @param can Whether this Entity can Attack.
+   * @return Pointer to Entity.
+   */
+  auto setCanAttack(bool can) -> Entity*;
+
+  /**
+   * Get attack range.
+   *
+   * @return Rectangle representing Entity's attack range.
+   */
+  auto getAttackRange() const -> const sf::FloatRect&;
+
+  /**
+   * Set attack range.
+   *
+   * @param width Width of range rectangle.
+   * @param height Height of range rectangle.
+   * @return Pointer to Entity.
+   */
+  auto setAttackRange(float width, float height) -> Entity*;
 
 private:
   /**

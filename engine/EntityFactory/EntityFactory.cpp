@@ -1,6 +1,7 @@
 #include "../Physics/Physics.hpp"
 #include "EntityFactory.hpp"
 #include "SFML/Graphics/Color.hpp"
+#include "SFML/Graphics/Rect.hpp"
 #include "SFML/System/Vector2.hpp"
 #include <__algorithm/remove.h>
 #include <__algorithm/remove_if.h>
@@ -16,6 +17,10 @@ EntityFactory::~EntityFactory()
 {
   for (auto entity : this->m_entities) {
     delete entity;
+  }
+
+  for (auto enemy : this->m_enemies) {
+    delete enemy;
   }
 }
 
@@ -44,6 +49,9 @@ EntityFactory::createEntity(ENTITY_TYPE type) -> Entity*
       return this->m_getPlayer();
     case ENTITY_TYPE::MUSHROOM:
       return this->m_getMushroom();
+    case SKELETON:
+      return this->m_getSkeleton();
+      break;
   }
 }
 
@@ -70,9 +78,11 @@ EntityFactory::updateEntities(sf::RenderWindow& window, Entity* player) -> void
 {
   this->m_cleanupDeadEntities();
 
-  std::for_each(this->m_enemies.begin(), this->m_enemies.end(), [](auto enemy) {
-    enemy->patrol();
-  });
+  std::for_each(
+    this->m_enemies.begin(), this->m_enemies.end(), [player](auto enemy) {
+      enemy->patrol();
+      enemy->manageAttackingRange(player);
+    });
 
   for (auto entity : this->m_entities) {
     Physics::manageWindowCollision(window, *entity);
@@ -118,7 +128,7 @@ auto
 EntityFactory::m_getMushroom() -> Entity*
 {
   auto mushroom = new Entity(2, 1, 10);
-  mushroom->setBoundingBox(56, 56);
+  mushroom->setCanAttack(false)->setBoundingBox(56, 56);
   mushroom->c_animation.setTexture("static/mushroom-1.png")
     ->setTextureSize(56, 56)
 
@@ -136,16 +146,39 @@ EntityFactory::m_getMushroom() -> Entity*
 }
 
 auto
+EntityFactory::m_getSkeleton() -> Entity*
+{
+  auto mushroom = new Entity(2, 5, 25);
+  mushroom->setAttackRange(56, 56)->setCanAttack(true)->setBoundingBox(56, 56);
+  mushroom->c_animation.setTexture("static/skeleton.png")
+    ->setTextureSize(57, 56)
+
+    ->setFrames(Components::ENTITY_STATE::STILL, 1, 1)
+    ->setFrames(Components::ENTITY_STATE::WALKING_LEFT, 8, 1)
+    ->setFrames(Components::ENTITY_STATE::WALKING_RIGHT, 8, 1)
+    ->setFrames(Components::ENTITY_STATE::ATTACKING, 6, 0)
+    ->setAnimationTimeout(100)
+
+    ->initSprite()
+    ->animate(mushroom->getState(), mushroom->getFacingDirection());
+
+  this->m_entities.push_back(mushroom);
+
+  return mushroom;
+}
+
+auto
 EntityFactory::m_manageAttacks(Entity* entity) -> void
 {
   sf::FloatRect attack;
-  attack.width = 1;
+  attack.width = 5;
   attack.height = entity->getBox().height;
   attack.top = entity->getBox().top;
 
   switch (entity->getFacingDirection()) {
     case Components::RIGHT:
       attack.left = entity->getBox().left + entity->getBox().width;
+      break;
     case Components::LEFT:
       attack.left = entity->getBox().left - attack.width;
       break;

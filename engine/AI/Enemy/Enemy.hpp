@@ -24,25 +24,33 @@ public:
   Enemy(Entity* entity);
 
   /**
-   * Set patrolling properties for an Entity
+   * Set patrolling properties for an Entity.
    *
-   * @param from Where Entity should start
-   * @param to Where Entity should turn back
+   * @param from Where Entity should start.
+   * @param to Where Entity should turn back.
    */
   auto setPatrol(float from, float to) -> void;
+
   /**
-   * Starts patrolling if properties have been set
+   * Starts patrolling if properties have been set.
    */
   auto patrol() -> void;
 
   /**
-   * A shorthand to determine if this AI controlls a given Entity
+   * Checks if player is in attacking range. And acts upon it
+   *
+   * @param player Player entity
+   */
+  auto manageAttackingRange(Entity* player) -> void;
+
+  /**
+   * A shorthand to determine if this AI controlls a given Entity.
    */
   auto operator==(Entity* ent) -> bool;
 
 private:
   /**
-   * Manages Entity direction depending on which point it has crossed
+   * Manages Entity direction depending on which point it has crossed.
    */
   auto m_manageDirection() -> void;
 };

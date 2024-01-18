@@ -130,13 +130,44 @@ Entity::getPosition() const -> const sf::Vector2f&
 }
 
 auto
+Entity::getCanAttack() const -> bool
+{
+  return this->m_canAttack;
+}
+
+auto
+Entity::setCanAttack(bool can) -> Entity*
+{
+  this->m_canAttack = can;
+  return this;
+}
+
+auto
+Entity::getAttackRange() const -> const sf::FloatRect&
+{
+  return this->m_attackReach;
+}
+
+auto
+Entity::setAttackRange(float width, float height) -> Entity*
+{
+  this->m_attackReach = sf::FloatRect(this->m_position, { width, height });
+  return this;
+}
+
+auto
 Entity::m_move() -> void
 {
   this->m_manageGravity();
   this->moveBy(this->m_velocity);
 
+  // Adjist bounding box position
   this->m_boundingBox.left = this->m_position.x;
   this->m_boundingBox.top = this->m_position.y;
+
+  // Adjist attack reach box position
+  this->m_attackReach.left = this->m_position.x;
+  this->m_attackReach.top = this->m_position.y;
 }
 
 auto

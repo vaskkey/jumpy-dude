@@ -22,6 +22,7 @@ Game::Game()
   this->m_hpText.setFillColor(sf::Color::Red);
 
   this->m_tileManager.init();
+  this->m_itemManager.init();
 
   this->m_player = this->m_entityFactory.init();
 
@@ -39,6 +40,7 @@ Game::loop() -> void
     this->m_handleEvents();
 
     this->m_entityFactory.updateEntities(this->m_window, this->m_player);
+    this->m_itemManager.updateItems(this->m_player);
     Physics::manageTileMapCollision(this->m_entityFactory, this->m_tileManager);
     this->m_updateView();
 
@@ -76,6 +78,7 @@ Game::m_draw() -> void
 
   this->m_window.draw(this->m_worldBg);
   this->m_tileManager.renderTiles(this->m_window);
+  this->m_itemManager.renderItems(this->m_window);
   this->m_entityFactory.renderEntities(this->m_window);
   this->m_updateUI();
 

@@ -2,8 +2,8 @@
 
 #include "../Entity/Entity.hpp"
 #include "../EntityFactory/EntityFactory.hpp"
-#include "../TileManager/TileManager.hpp"
 #include "../Items/ItemManager/ItemManager.hpp"
+#include "../TileManager/TileManager.hpp"
 
 #include "SFML/Graphics/Font.hpp"
 #include "SFML/Graphics/RenderWindow.hpp"
@@ -23,14 +23,15 @@ class Game
   sf::Texture m_worldTexture; /**< Texture for the game world. */
   sf::Sprite m_worldBg;       /**< Background sprite for the game world. */
 
-  Items::ItemManager m_itemManager;     /**< Item manager for managing game items. */
+  Items::ItemManager
+    m_itemManager;               /**< Item manager for managing game items. */
   TileManager m_tileManager;     /**< Tile manager for managing game tiles. */
   EntityFactory m_entityFactory; /**< Entity factory for creating entities. */
   Entity* m_player;              /**< Pointer to the player entity. */
 
   sf::Text m_hpText; /**< UI Text telling how much HP player has */
   sf::Font m_font;   /**< UI font */
-  float m_cameraX;     /** X position of the Camera */
+  float m_cameraX;   /** X position of the Camera */
 
 public:
   /**

@@ -56,7 +56,8 @@ public:
   auto setBox(const sf::Vector2f& size) -> Tile*;
 
   /**
-   * Sets texture rectangle, used for sprites that have more than one tile on them.
+   * Sets texture rectangle, used for sprites that have more than one tile on
+   * them.
    *
    * @param rect Rectangle with size and position of texture on the sprite
    * @return The Tile

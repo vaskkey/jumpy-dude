@@ -1,6 +1,6 @@
+#include "TileManager.hpp"
 #include "SFML/Graphics/Rect.hpp"
 #include "SFML/Graphics/RenderTarget.hpp"
-#include "TileManager.hpp"
 #include <fstream>
 
 namespace Engine {
@@ -40,7 +40,7 @@ TileManager::createTile(TILE_TYPE type, const sf::Vector2f& position) -> Tile*
     case BASIC_HALF:
       return this->m_getBasicHalf(position);
       break;
-    }
+  }
 }
 
 auto

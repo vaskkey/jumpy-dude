@@ -1,6 +1,6 @@
+#include "ItemManager.hpp"
 #include "../../Physics/Physics.hpp"
 #include "../Heart/Heart.hpp"
-#include "ItemManager.hpp"
 #include <fstream>
 
 namespace Engine {

@@ -1,5 +1,5 @@
-#include "../Config/Config.hpp"
 #include "Physics.hpp"
+#include "../Config/Config.hpp"
 #include "SFML/Graphics/Rect.hpp"
 #include "SFML/System/Vector2.hpp"
 #include <complex>

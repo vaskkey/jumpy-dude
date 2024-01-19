@@ -1,5 +1,5 @@
-#include "../../Physics/Physics.hpp"
 #include "Enemy.hpp"
+#include "../../Physics/Physics.hpp"
 #include "SFML/System/Vector2.hpp"
 #include <iostream>
 

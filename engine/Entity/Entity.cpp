@@ -18,16 +18,18 @@ Entity::Entity(int speed, int damage, int hp)
 auto
 Entity::render(sf::RenderTarget& target) -> void
 {
+  // Move texture by half the width of bounding box and height difference
+  // between texture size and bounding box
+  // This way bounding box will be centered horizontally and at the bottom
+  // vertically
+  auto spritePos =
+    this->m_position -
+    sf::Vector2f(this->m_boundingBox.width / 2,
+                 this->c_animation.getSprite().getTextureRect().height -
+                   this->m_boundingBox.height);
   this->c_animation.animate(this->getState(), this->getFacingDirection())
-    ->move(this->m_position);
+    ->move(spritePos);
   target.draw(this->c_animation.getSprite());
-  // auto box = sf::RectangleShape();
-  // box.setPosition(this->m_boundingBox.getPosition());
-  // box.setSize(this->m_boundingBox.getSize());
-  // box.setFillColor(sf::Color::Transparent);
-  // box.setOutlineColor(sf::Color::Red);
-  // box.setOutlineThickness(1);
-  // target.draw(box);
 }
 
 auto
@@ -35,9 +37,6 @@ Entity::update() -> void
 {
   this->m_setState();
   this->m_move();
-
-  this->c_animation.animate(this->getState(), this->getFacingDirection())
-    ->move(this->m_position);
 }
 
 auto
@@ -160,10 +159,6 @@ Entity::m_move() -> void
 {
   this->m_manageGravity();
   this->moveBy(this->m_velocity);
-
-  // Adjist bounding box position
-  this->m_boundingBox.left = this->m_position.x;
-  this->m_boundingBox.top = this->m_position.y;
 
   // Adjist attack reach box position
   this->m_attackReach.left = this->m_position.x;

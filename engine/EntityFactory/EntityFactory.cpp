@@ -106,7 +106,7 @@ auto
 EntityFactory::m_getPlayer() -> Entity*
 {
   auto player = new Entity(3, 5, 100);
-  player->setBoundingBox(56, 56);
+  player->setBoundingBox(27, 35);
   player->c_animation.setTexture("static/main-char-1.png")
     ->setTextureSize(56, 56)
 
@@ -128,7 +128,7 @@ auto
 EntityFactory::m_getMushroom() -> Entity*
 {
   auto mushroom = new Entity(2, 1, 10);
-  mushroom->setCanAttack(false)->setBoundingBox(56, 56);
+  mushroom->setCanAttack(false)->setBoundingBox(27, 40);
   mushroom->c_animation.setTexture("static/mushroom-1.png")
     ->setTextureSize(56, 56)
 
@@ -149,7 +149,7 @@ auto
 EntityFactory::m_getSkeleton() -> Entity*
 {
   auto mushroom = new Entity(2, 5, 25);
-  mushroom->setAttackRange(56, 56)->setCanAttack(true)->setBoundingBox(56, 56);
+  mushroom->setAttackRange(56, 56)->setCanAttack(true)->setBoundingBox(37, 38);
   mushroom->c_animation.setTexture("static/skeleton.png")
     ->setTextureSize(57, 56)
 

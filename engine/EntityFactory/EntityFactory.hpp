@@ -14,7 +14,8 @@ enum ENTITY_TYPE
 {
   PLAYER,
   MUSHROOM,
-  SKELETON
+  SKELETON,
+  BOSS
 };
 
 class EntityFactory
@@ -93,6 +94,13 @@ private:
    * @return Pointer to the created skeleton entity.
    */
   auto m_getSkeleton() -> Entity*;
+
+  /**
+   * Creates a new Boss entity.
+   *
+   * @return Pointer to the created Boss entity.
+   */
+  auto m_getBoss() -> Entity*;
 
   /**
    * Manages the attacks of the specified entity.

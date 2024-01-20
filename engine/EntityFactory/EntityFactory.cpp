@@ -51,8 +51,9 @@ EntityFactory::createEntity(ENTITY_TYPE type) -> Entity*
       return this->m_getMushroom();
     case SKELETON:
       return this->m_getSkeleton();
-      break;
-  }
+    case BOSS:
+      return this->m_getBoss();
+    }
 }
 
 auto
@@ -148,9 +149,9 @@ EntityFactory::m_getMushroom() -> Entity*
 auto
 EntityFactory::m_getSkeleton() -> Entity*
 {
-  auto mushroom = new Entity(2, 5, 25);
-  mushroom->setAttackRange(56, 56)->setCanAttack(true)->setBoundingBox(37, 38);
-  mushroom->c_animation.setTexture("static/skeleton.png")
+  auto skeleton = new Entity(2, 3, 25);
+  skeleton->setAttackRange(56, 56)->setCanAttack(true)->setBoundingBox(37, 38);
+  skeleton->c_animation.setTexture("static/skeleton.png")
     ->setTextureSize(57, 56)
 
     ->setFrames(Components::ENTITY_STATE::STILL, 1, 1)
@@ -160,11 +161,33 @@ EntityFactory::m_getSkeleton() -> Entity*
     ->setAnimationTimeout(100)
 
     ->initSprite()
-    ->animate(mushroom->getState(), mushroom->getFacingDirection());
+    ->animate(skeleton->getState(), skeleton->getFacingDirection());
 
-  this->m_entities.push_back(mushroom);
+  this->m_entities.push_back(skeleton);
 
-  return mushroom;
+  return skeleton;
+}
+
+auto
+EntityFactory::m_getBoss() -> Entity*
+{
+  auto boss = new Entity(4, 5, 120);
+  boss->setAttackRange(35, 35)->setCanAttack(true)->setBoundingBox(25, 30);
+  boss->c_animation.setTexture("static/boss.png")
+    ->setTextureSize(56, 56)
+
+    ->setFrames(Components::ENTITY_STATE::STILL, 8, 0)
+    ->setFrames(Components::ENTITY_STATE::WALKING_LEFT, 8, 0)
+    ->setFrames(Components::ENTITY_STATE::WALKING_RIGHT, 8, 0)
+    ->setFrames(Components::ENTITY_STATE::ATTACKING, 8, 0)
+    ->setAnimationTimeout(100)
+
+    ->initSprite()
+    ->animate(boss->getState(), boss->getFacingDirection());
+
+  this->m_entities.push_back(boss);
+
+  return boss;
 }
 
 auto

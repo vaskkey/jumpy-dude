@@ -9,7 +9,7 @@ namespace Engine {
 
 Entity::Entity(int speed, int damage, int hp)
   : m_speed(speed)
-  , DAMAGE(damage)
+  , m_damage(damage)
   , hp(hp)
 {
   this->m_damageTimer.restart();
@@ -152,6 +152,30 @@ Entity::setAttackRange(float width, float height) -> Entity*
 {
   this->m_attackReach = sf::FloatRect(this->m_position, { width, height });
   return this;
+}
+
+auto
+Entity::setSpeed(int speed) -> void
+{
+  this->m_speed = speed;
+}
+
+auto
+Entity::getSpeed() const -> int
+{
+  return this->m_speed;
+}
+
+auto
+Entity::setPower(int power) -> void
+{
+  this->m_damage = power;
+}
+
+auto
+Entity::getPower() const -> int
+{
+  return this->m_damage;
 }
 
 auto

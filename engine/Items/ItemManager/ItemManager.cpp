@@ -1,6 +1,8 @@
-#include "ItemManager.hpp"
 #include "../../Physics/Physics.hpp"
 #include "../Heart/Heart.hpp"
+#include "../PowerElixir/PowerElixir.hpp"
+#include "../SpeedElixir/SpeedElixir.hpp"
+#include "ItemManager.hpp"
 #include <fstream>
 
 namespace Engine {
@@ -55,6 +57,12 @@ ItemManager::m_createItem(ITEM_TYPE type, const sf::Vector2f& position) -> Item*
   switch (type) {
     case HEART:
       return this->m_getHeart(position);
+    case SPEED_ELIXIR:
+      return this->m_getSpeedElixir(position);
+      break;
+    case POWER_ELIXIR:
+      return this->m_getPowerElixir(position);
+      break;
   }
 }
 
@@ -62,10 +70,24 @@ auto
 ItemManager::m_getHeart(const sf::Vector2f& position) -> Item*
 {
   auto heart = new Heart(position);
-
   this->m_items.push_back(heart);
-
   return heart;
+}
+
+auto
+ItemManager::m_getSpeedElixir(const sf::Vector2f& position) -> Item*
+{
+  auto elixir = new SpeedElixir(position);
+  this->m_items.push_back(elixir);
+  return elixir;
+}
+
+auto
+ItemManager::m_getPowerElixir(const sf::Vector2f& position) -> Item*
+{
+  auto elixir = new PowerElixir(position);
+  this->m_items.push_back(elixir);
+  return elixir;
 }
 
 auto

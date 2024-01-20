@@ -39,7 +39,8 @@ class Entity
   bool m_grounded = false;    /**< Flag indicating if the entity is grounded. */
   float m_jumpedDistance = 0; /**< The distance the entity has jumped. */
 
-  const int m_speed; /**< The speed of the entity. */
+  int m_speed; /**< The speed of the entity. */
+  int m_damage; /**< The damage inflicted by the entity. */
 
 public:
   Components::Animation
@@ -48,7 +49,6 @@ public:
        attacking = false; /**< Flags indicating the movement and attack state of
                              the entity. */
 
-  const int DAMAGE; /**< The damage inflicted by the entity. */
   int hp;           /**< The hit points of the entity. */
 
   /**
@@ -192,6 +192,34 @@ public:
    * @return Pointer to Entity.
    */
   auto setAttackRange(float width, float height) -> Entity*;
+
+  /**
+   * Set movement speed.
+   *
+   * @param speed New movement speed for Entity.
+   */
+  auto setSpeed(int speed) -> void;
+
+  /**
+   * Get movement speed.
+   *
+   * @return Movement speed of Entity.
+   */
+  auto getSpeed() const -> int;
+
+  /**
+   * Set damage dealt by Entity.
+   *
+   * @param power New Power for Entity.
+   */
+  auto setPower(int power) -> void;
+
+  /**
+   * Get damage dealt by entity.
+   *
+   * @return Power of Entity.
+   */
+  auto getPower() const -> int;
 
 private:
   /**

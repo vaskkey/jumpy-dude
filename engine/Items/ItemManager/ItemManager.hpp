@@ -8,7 +8,9 @@ namespace Engine {
 namespace Items {
 enum ITEM_TYPE
 {
-  HEART
+  HEART,
+  SPEED_ELIXIR,
+  POWER_ELIXIR
 };
 
 class ItemManager
@@ -49,12 +51,28 @@ private:
   auto m_createItem(ITEM_TYPE type, const sf::Vector2f& position) -> Item*;
 
   /**
-   * Creates a heart that refills your HP.
+   * Creates a heart that refills player's HP.
    *
    * @param position Position of the Heart.
    * @return Pointer to the created heart.
    */
   auto m_getHeart(const sf::Vector2f& position) -> Item*;
+
+  /**
+   * Creates an elixir that increases player's speed.
+   *
+   * @param position Position of the Elixir.
+   * @return Pointer to the created elixir.
+   */
+  auto m_getSpeedElixir(const sf::Vector2f& position) -> Item*;
+
+  /**
+   * Creates an elixir that increases player's damaging power.
+   *
+   * @param position Position of the Elixir.
+   * @return Pointer to the created elixir.
+   */
+  auto m_getPowerElixir(const sf::Vector2f& position) -> Item*;
 
   /**
    * Removes item from vector and deletes its pointer.

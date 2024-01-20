@@ -186,7 +186,7 @@ EntityFactory::m_manageAttacks(Entity* entity) -> void
 
   for (auto ent : this->m_entities) {
     if (ent != entity && Physics::isColliding(ent->getBox(), attack)) {
-      ent->takeDamage(entity->DAMAGE);
+      ent->takeDamage(entity->getPower());
     }
   }
 }
@@ -198,7 +198,7 @@ EntityFactory::m_managePlayerDamage(Entity* player, Entity* entity) -> void
     return;
 
   if (Physics::isColliding(player->getBox(), entity->getBox())) {
-    player->takeDamage(entity->DAMAGE);
+    player->takeDamage(entity->getPower());
   }
 }
 

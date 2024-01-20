@@ -1,10 +1,9 @@
-#include "EntityFactory.hpp"
+#include "../GameEnd/GameEnd.hpp"
 #include "../Physics/Physics.hpp"
+#include "EntityFactory.hpp"
 #include "SFML/Graphics/Color.hpp"
 #include "SFML/Graphics/Rect.hpp"
 #include "SFML/System/Vector2.hpp"
-#include <__algorithm/remove.h>
-#include <__algorithm/remove_if.h>
 #include <algorithm>
 #include <fstream>
 #include <iostream>
@@ -53,7 +52,7 @@ EntityFactory::createEntity(ENTITY_TYPE type) -> Entity*
       return this->m_getSkeleton();
     case BOSS:
       return this->m_getBoss();
-    }
+  }
 }
 
 auto
@@ -106,9 +105,9 @@ EntityFactory::getEntities() const -> const std::vector<Entity*>&
 auto
 EntityFactory::m_getPlayer() -> Entity*
 {
-  auto player = new Entity(3, 5, 100);
-  player->setBoundingBox(27, 35);
-  player->c_animation.setTexture("static/main-char-1.png")
+  this->m_player = new Entity(3, 5, 100);
+  m_player->setBoundingBox(27, 35);
+  m_player->c_animation.setTexture("static/main-char-1.png")
     ->setTextureSize(56, 56)
 
     ->setFrames(Components::ENTITY_STATE::STILL, 1, 0)
@@ -119,10 +118,10 @@ EntityFactory::m_getPlayer() -> Entity*
     ->setAnimationTimeout(50)
 
     ->initSprite()
-    ->animate(player->getState(), player->getFacingDirection());
+    ->animate(m_player->getState(), m_player->getFacingDirection());
 
-  this->m_entities.push_back(player);
-  return player;
+  this->m_entities.push_back(m_player);
+  return m_player;
 }
 
 auto
@@ -171,9 +170,9 @@ EntityFactory::m_getSkeleton() -> Entity*
 auto
 EntityFactory::m_getBoss() -> Entity*
 {
-  auto boss = new Entity(4, 5, 120);
-  boss->setAttackRange(35, 35)->setCanAttack(true)->setBoundingBox(25, 30);
-  boss->c_animation.setTexture("static/boss.png")
+  this->m_boss = new Entity(4, 5, 120);
+  m_boss->setAttackRange(35, 35)->setCanAttack(true)->setBoundingBox(25, 30);
+  m_boss->c_animation.setTexture("static/boss.png")
     ->setTextureSize(56, 56)
 
     ->setFrames(Components::ENTITY_STATE::STILL, 8, 0)
@@ -183,11 +182,11 @@ EntityFactory::m_getBoss() -> Entity*
     ->setAnimationTimeout(100)
 
     ->initSprite()
-    ->animate(boss->getState(), boss->getFacingDirection());
+    ->animate(m_boss->getState(), m_boss->getFacingDirection());
 
-  this->m_entities.push_back(boss);
+  this->m_entities.push_back(m_boss);
 
-  return boss;
+  return m_boss;
 }
 
 auto
@@ -228,6 +227,14 @@ EntityFactory::m_managePlayerDamage(Entity* player, Entity* entity) -> void
 auto
 EntityFactory::m_cleanupDeadEntities() -> void
 {
+  if (this->m_player->hp <= 0) {
+    throw GameEnd::PlayerLost();
+  }
+
+  if (this->m_boss->hp <= 0) {
+    throw GameEnd::PlayerWon();
+  }
+
   auto iter = std::remove_if(
     this->m_entities.begin(), this->m_entities.end(), [this](auto ent) -> bool {
       bool toBeDeleted = ent->hp <= 0;

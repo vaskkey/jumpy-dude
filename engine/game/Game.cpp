@@ -1,6 +1,7 @@
-#include "Game.hpp"
 #include "../Config/Config.hpp"
+#include "../GameEnd/GameEnd.hpp"
 #include "../Physics/Physics.hpp"
+#include "Game.hpp"
 #include "SFML/Graphics/Color.hpp"
 #include "SFML/Graphics/Font.hpp"
 #include "SFML/Graphics/Rect.hpp"
@@ -36,16 +37,24 @@ Game::Game()
 auto
 Game::loop() -> void
 {
+  std::string result = "";
   while (this->m_window.isOpen()) {
-    this->m_handleEvents();
-
-    this->m_entityFactory.updateEntities(this->m_window, this->m_player);
-    this->m_itemManager.updateItems(this->m_player);
-    Physics::manageTileMapCollision(this->m_entityFactory, this->m_tileManager);
-    this->m_updateView();
-
-    this->m_draw();
+    try {
+      if (this->m_gameOver) {
+        this->m_endScreen(result);
+      } else {
+        this->m_handleGame();
+      }
+    } catch (GameEnd::PlayerWon& ex) {
+      result = "You Won!";
+      this->m_gameOver = true;
+    } catch (GameEnd::PlayerLost& ex) {
+      result = "You Lost!";
+      this->m_gameOver = true;
+    }
   }
+
+  this->m_endScreen("You Won!");
 }
 
 auto
@@ -88,6 +97,9 @@ Game::m_draw() -> void
 auto
 Game::m_handleKeyEvent(const sf::Keyboard::Key& key, bool value) -> void
 {
+  if (this->m_gameOver)
+    return;
+
   switch (key) {
     case sf::Keyboard::Key::W:
       this->m_player->up = value;
@@ -133,4 +145,31 @@ Game::m_updateUI() -> void
   this->m_window.draw(this->m_hpText);
 }
 
+auto
+Game::m_endScreen(const std::string& str) -> void
+{
+  this->m_window.clear();
+  this->m_view.reset(sf::FloatRect(0, 0, 800, 600));
+  this->m_window.setView(this->m_view);
+  auto text = sf::Text(str, this->m_font);
+  text.setFillColor(sf::Color::White);
+  text.setPosition({ 350, 250 });
+  this->m_window.draw(text);
+  this->m_window.display();
+  this->m_handleEvents();
+}
+
+auto
+Game::m_handleGame() -> void
+{
+
+  this->m_handleEvents();
+
+  this->m_entityFactory.updateEntities(this->m_window, this->m_player);
+  this->m_itemManager.updateItems(this->m_player);
+  Physics::manageTileMapCollision(this->m_entityFactory, this->m_tileManager);
+  this->m_updateView();
+
+  this->m_draw();
+}
 }

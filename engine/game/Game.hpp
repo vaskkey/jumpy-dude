@@ -33,6 +33,8 @@ class Game
   sf::Font m_font;   /**< UI font */
   float m_cameraX;   /** X position of the Camera */
 
+  bool m_gameOver = false; /* Determines which screen to show */
+
 public:
   /**
    * Constructor for the Game class.
@@ -75,6 +77,18 @@ private:
    * @param value The value indicating if the key was pressed or released.
    */
   auto m_handleKeyEvent(const sf::Keyboard::Key& key, bool value) -> void;
+
+  /**
+   * Handles game end.
+   *
+   * @param str String to display to player.
+   */
+  auto m_endScreen(const std::string& str) -> void;
+
+  /**
+  * Handles events and rendering while game is ongoing.
+  */
+  auto m_handleGame() -> void;
 };
 
 }

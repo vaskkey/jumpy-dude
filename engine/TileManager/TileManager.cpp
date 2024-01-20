@@ -17,7 +17,7 @@ TileManager::~TileManager()
 auto
 TileManager::init() -> void
 {
-  auto file = std::ifstream("map.txt");
+  auto file = std::ifstream("configs/map.txt");
 
   int t;
   float x, y;

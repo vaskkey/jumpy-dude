@@ -27,7 +27,7 @@ auto
 EntityFactory::init() -> Entity*
 {
   auto player = this->createEntity(ENTITY_TYPE::PLAYER);
-  auto file = std::ifstream("entities.txt");
+  auto file = std::ifstream("configs/entities.txt");
 
   int t;
   float from, to;

@@ -40,7 +40,7 @@ ItemManager::updateItems(Entity* player) -> void
 auto
 ItemManager::init() -> void
 {
-  auto file = std::ifstream("items.txt");
+  auto file = std::ifstream("configs/items.txt");
 
   int t;
   float x, y;

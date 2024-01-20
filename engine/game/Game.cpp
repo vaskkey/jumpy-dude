@@ -1,7 +1,7 @@
+#include "Game.hpp"
 #include "../Config/Config.hpp"
 #include "../GameEnd/GameEnd.hpp"
 #include "../Physics/Physics.hpp"
-#include "Game.hpp"
 #include "SFML/Graphics/Color.hpp"
 #include "SFML/Graphics/Font.hpp"
 #include "SFML/Graphics/Rect.hpp"

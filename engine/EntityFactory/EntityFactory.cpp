@@ -1,6 +1,6 @@
+#include "EntityFactory.hpp"
 #include "../GameEnd/GameEnd.hpp"
 #include "../Physics/Physics.hpp"
-#include "EntityFactory.hpp"
 #include "SFML/Graphics/Color.hpp"
 #include "SFML/Graphics/Rect.hpp"
 #include "SFML/System/Vector2.hpp"

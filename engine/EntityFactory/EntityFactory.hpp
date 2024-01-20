@@ -24,7 +24,7 @@ class EntityFactory
   std::vector<AI::Enemy*> m_enemies; /**< A vector of Enemy AI's. */
 
   Entity* m_player; /**< Player entity */
-  Entity* m_boss; /**< Boss entity */
+  Entity* m_boss;   /**< Boss entity */
 
 public:
   EntityFactory();

@@ -86,8 +86,8 @@ private:
   auto m_endScreen(const std::string& str) -> void;
 
   /**
-  * Handles events and rendering while game is ongoing.
-  */
+   * Handles events and rendering while game is ongoing.
+   */
   auto m_handleGame() -> void;
 };
 

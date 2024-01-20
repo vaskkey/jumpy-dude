@@ -1,8 +1,8 @@
+#include "ItemManager.hpp"
 #include "../../Physics/Physics.hpp"
 #include "../Heart/Heart.hpp"
 #include "../PowerElixir/PowerElixir.hpp"
 #include "../SpeedElixir/SpeedElixir.hpp"
-#include "ItemManager.hpp"
 #include <fstream>
 
 namespace Engine {

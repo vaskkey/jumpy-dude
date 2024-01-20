@@ -39,7 +39,7 @@ class Entity
   bool m_grounded = false;    /**< Flag indicating if the entity is grounded. */
   float m_jumpedDistance = 0; /**< The distance the entity has jumped. */
 
-  int m_speed; /**< The speed of the entity. */
+  int m_speed;  /**< The speed of the entity. */
   int m_damage; /**< The damage inflicted by the entity. */
 
 public:
@@ -49,7 +49,7 @@ public:
        attacking = false; /**< Flags indicating the movement and attack state of
                              the entity. */
 
-  int hp;           /**< The hit points of the entity. */
+  int hp; /**< The hit points of the entity. */
 
   /**
    * Constructor for the Entity class.

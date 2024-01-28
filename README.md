@@ -2,6 +2,8 @@
 
 First try on SFML based 2D game.
 
+![](https://github.com/vaskkey/jumpy-dude/blob/main/example.gif)
+
 Basic AABB collisions, sprite animations, jumping physics.
 
 ### Assets
